@@ -1,2 +1,5 @@
 # Default ignored files
 /.idea.ObjectStorage/.idea/workspace.xml
+# Datasource local storage ignored files
+/.idea.ObjectStorage/.idea/dataSources.local.xml
+/.idea.ObjectStorage/.idea/dataSources/
