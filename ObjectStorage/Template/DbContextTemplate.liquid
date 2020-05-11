@@ -1,0 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+
+namespace GeneratedClass
+{
+    public class GeneratedDbContext : Microsoft.EntityFrameworkCore.DbContext
+    {
+        {% for class in data -%}
+        public DbSet<{{class.Name}}> {{class.Name}} { get; set; }
+        {% endfor -%}
+
+    
+    }
+}

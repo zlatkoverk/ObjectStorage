@@ -1,0 +1,22 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace GeneratedClass
+{
+    [Table("data-{{ data.Name }}")]
+    public class {{data.Name}}
+    {
+        [Key]
+        public Guid Id { get; set; }
+    {% for property in data.Properties -%}
+        public {{ property.Type }} {{ property.Name }} { get; set; }
+    {% endfor -%}
+    
+        public int Print() {
+            return 3;    
+        }
+    }
+}
