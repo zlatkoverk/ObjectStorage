@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace GeneratedClass
 {
@@ -8,6 +10,23 @@ namespace GeneratedClass
         public DbSet<{{class.Name}}> {{class.Name}} { get; set; }
         {% endfor -%}
 
+        public GeneratedDbContext() : base(create())
+        {
+        }
     
+        public static DbContextOptions<GeneratedDbContext> create()
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<GeneratedDbContext>();
+            optionsBuilder.UseSqlite("Data Source=" + "a.db");
+            return optionsBuilder.Options;
+        }
+        
+        public List<object> GetAllTables()
+                {
+                    return new List<object>()
+                        {
+                        {{ data | map: "Name" | join: ", " }}
+                        };
+            }
     }
 }

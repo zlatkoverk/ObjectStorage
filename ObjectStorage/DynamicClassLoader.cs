@@ -31,6 +31,7 @@ namespace ObjectStorage
                 MetadataReference.CreateFromFile(typeof(TableAttribute).Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(DbSetInitializer).Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(SqlitePropertyExtensions).Assembly.Location),
+                // MetadataReference.CreateFromFile(Assembly.Load("System.Xml.Linq").Location),
                 MetadataReference.CreateFromFile(Assembly.Load("netstandard, Version=2.0.0.0").Location),
                 MetadataReference.CreateFromFile(Assembly.Load("System.Runtime, Version=4.2.2.0").Location),
                 MetadataReference.CreateFromFile(Assembly.Load("System.Data.Common, Version=4.2.2.0").Location),

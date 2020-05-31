@@ -1,5 +1,6 @@
 ﻿using System;
 using System.CodeDom.Compiler;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -50,17 +51,41 @@ namespace ObjectStorage
             string baseDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string templatePath = Path.Combine(baseDir, "Template/ClassTemplate.liquid");
             Template template = Template.Parse(File.ReadAllText(templatePath));
-            var def = _dbContext.Classes.Include(e => e.Properties).First();
-            string classString = template.Render(Hash.FromAnonymousObject(new {data = def}));
 
-            dynamic d = DynamicClassLoader.createDynamicInstance(classString, "GeneratedClass." + def.Name);
+            var classes = _dbContext.Classes.Include(e => e.Properties).ToList();
+            foreach (var def in classes)
+            {
+                string classString = template.Render(Hash.FromAnonymousObject(new {data = def}));
+                dynamic c = DynamicClassLoader.createDynamicInstance(classString, "GeneratedClass." + def.Name);
+                Console.Out.WriteLine("Loaded class {0}", c.GetType());
+            }
 
             templatePath = Path.Combine(baseDir, "Template/DbContextTemplate.liquid");
             template = Template.Parse(File.ReadAllText(templatePath));
-            classString = template.Render(Hash.FromAnonymousObject(new {data = new Class[] {def}}));
-            
-            d = DynamicClassLoader.createDynamicInstance(classString, "GeneratedClass.GeneratedDbContext");
-            Console.Out.WriteLine("d.ty = {0}", d.GetType());
+            string dbContextClassString = template.Render(Hash.FromAnonymousObject(new {data = classes}));
+
+            dynamic d = DynamicClassLoader.createDynamicInstance(dbContextClassString,
+                "GeneratedClass.GeneratedDbContext");
+
+            Console.Out.WriteLine("Loaded class {0}", d.GetType());
+            d.Database.EnsureCreated();
+
+            try
+            {
+                foreach (var table in d.GetAllTables())
+                {
+                    foreach (var a in table.AsQueryable())
+                    {
+                        Console.Out.WriteLine("Loaded Object {0}", a.GetType());
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Model has changed - recreating DB");
+                d.Database.EnsureDeleted();
+                d.Database.EnsureCreated();
+            }
         }
     }
 }
