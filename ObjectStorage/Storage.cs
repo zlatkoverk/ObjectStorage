@@ -23,6 +23,8 @@ namespace ObjectStorage
     public class Storage
     {
         private ModelDbContext _dbContext;
+        private dynamic _storageDbContext;
+        private Dictionary<string, List<object>> _tableDictionary = new Dictionary<string, List<object>>();
 
         public Storage(string connectionString)
         {
@@ -37,10 +39,26 @@ namespace ObjectStorage
             _dbContext.Database.EnsureCreated();
         }
 
-        public void add(Class c)
+        public void addDefinition(Class c)
         {
             _dbContext.Classes.Add(c);
             _dbContext.SaveChanges();
+        }
+
+        public void addElement(string type, Dictionary<string, object> data)
+        {
+            dynamic c = DynamicClassLoader.createCachedInstance("GeneratedClass." + type);
+
+            foreach (var kvp in data)
+            {
+                c.GetType().GetProperty(kvp.Key).SetValue(c, kvp.Value, null);
+                Console.Out.WriteLine("kvp = {0}", kvp.Value);
+            }
+
+            Console.Out.WriteLine("c = {0}", c.Id);
+            dynamic dbset = _storageDbContext.GetType().GetProperty(type).GetValue(_storageDbContext, null);
+            dbset.GetType().GetMethod("Add").Invoke(dbset, new[] {c});
+            _storageDbContext.SaveChanges();
         }
 
         public void load()
@@ -55,6 +73,7 @@ namespace ObjectStorage
             var classes = _dbContext.Classes.Include(e => e.Properties).ToList();
             foreach (var def in classes)
             {
+                _tableDictionary[def.Name] = new List<object>();
                 string classString = template.Render(Hash.FromAnonymousObject(new {data = def}));
                 dynamic c = DynamicClassLoader.createDynamicInstance(classString, "GeneratedClass." + def.Name);
                 Console.Out.WriteLine("Loaded class {0}", c.GetType());
@@ -64,18 +83,20 @@ namespace ObjectStorage
             template = Template.Parse(File.ReadAllText(templatePath));
             string dbContextClassString = template.Render(Hash.FromAnonymousObject(new {data = classes}));
 
-            dynamic d = DynamicClassLoader.createDynamicInstance(dbContextClassString,
+            _storageDbContext = DynamicClassLoader.createDynamicInstance(dbContextClassString,
                 "GeneratedClass.GeneratedDbContext");
 
-            Console.Out.WriteLine("Loaded class {0}", d.GetType());
-            d.Database.EnsureCreated();
+            Console.Out.WriteLine("Loaded class {0}", _storageDbContext.GetType());
+            _storageDbContext.Database.EnsureCreated();
 
             try
             {
-                foreach (var table in d.GetAllTables())
+                foreach (var table in _storageDbContext.GetAllTables())
                 {
                     foreach (var a in table.AsQueryable())
                     {
+                        string type = a.GetType().ToString();
+                        _tableDictionary[type.Split(".")[1]].Add(a);
                         Console.Out.WriteLine("Loaded Object {0}", a.GetType());
                     }
                 }
@@ -83,8 +104,8 @@ namespace ObjectStorage
             catch (Exception e)
             {
                 Console.WriteLine("Model has changed - recreating DB");
-                d.Database.EnsureDeleted();
-                d.Database.EnsureCreated();
+                _storageDbContext.Database.EnsureDeleted();
+                _storageDbContext.Database.EnsureCreated();
             }
         }
     }

@@ -15,11 +15,22 @@ namespace ObjectStorage
 {
     public class DynamicClassLoader
     {
-        private static List<Assembly> assms = new List<Assembly>();
+        private static Dictionary<string, Assembly> assms = new Dictionary<string, Assembly>();
+        private static Dictionary<string, string> classes = new Dictionary<string, string>();
+
+        public static object createCachedInstance(string className)
+        {
+            return createDynamicInstance(classes[className], className);
+        }
+
         public static object createDynamicInstance(string code, string className)
         {
+            if (assms.ContainsKey(className))
+            {
+                return assms[className].CreateInstance(className);
+            }
             var tree = SyntaxFactory.ParseSyntaxTree(code);
-            string fileName = "mylib"+assms.Count+".dll";
+            string fileName = "mylib" + className + ".dll";
 
             // Detect the file location for the library that defines the object type
             var systemRefLocation = typeof(object).GetTypeInfo().Assembly.Location;
@@ -37,7 +48,7 @@ namespace ObjectStorage
                 MetadataReference.CreateFromFile(Assembly.Load("System.Data.Common, Version=4.2.2.0").Location),
                 //TODO: HERE ADD STUFF
             };
-            refs.AddRange(assms.Select(a=>MetadataReference.CreateFromFile(a.Location)));
+            refs.AddRange(assms.Select(a => MetadataReference.CreateFromFile(a.Value.Location)));
 
             // A single, immutable invocation to the compiler
             // to produce a library
@@ -54,10 +65,11 @@ namespace ObjectStorage
                 // Load the assembly
                 Assembly asm =
                     AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
-                assms.Add(asm);
+                assms[className] = asm;
                 // Invoke the RoslynCore.Helper.CalculateCircleArea method passing an argument
                 double radius = 10;
                 dynamic r = asm.CreateInstance(className);
+                classes[className] = code;
                 return r;
                 // object result =
                 // asm.GetType("RoslynCore.Helper").GetMethod("func")
