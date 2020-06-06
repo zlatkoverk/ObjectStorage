@@ -71,19 +71,35 @@ namespace ObjectStorage
             return _dbContext.Classes.Include(c => c.Properties).ToList();
         }
 
+        public List<object> getEntities(Class c)
+        {
+            return _tableDictionary[c.Name];
+        }
+
         public void add(Class c)
         {
             _dbContext.Classes.Add(c);
             _dbContext.SaveChanges();
         }
 
-        public void addElement(string type, Dictionary<string, object> data)
+        public void addElement(string type, Dictionary<string, string> data)
         {
             dynamic c = DynamicClassLoader.createCachedInstance("GeneratedClass." + type);
+            var cl = getClasses().Find(e => e.Name == type);
 
             foreach (var kvp in data)
             {
-                c.GetType().GetProperty(kvp.Key).SetValue(c, kvp.Value, null);
+                var prop = cl.Properties.First(e => e.Name == kvp.Key);
+
+                // bool isPrimitiveType = t.IsPrimitive || t.IsValueType || (t == typeof(string));
+
+                // if (_dbContext.Classes.Find(type) != null)
+                // {
+
+                // }
+
+                c.GetType().GetProperty(kvp.Key)
+                    .SetValue(c, Convert.ChangeType(kvp.Value, c.GetType().GetProperty(kvp.Key).PropertyType), null);
                 Console.Out.WriteLine("kvp = {0}", kvp.Value);
             }
 

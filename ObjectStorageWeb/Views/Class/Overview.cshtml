@@ -1,0 +1,36 @@
+﻿@model OverviewViewModel
+@{
+    ViewData["Title"] = "Overview";
+}
+<h3>@Model.Class.Name</h3>
+<form method="post" action="/class/@Model.Class.Name/">
+    <table>
+        <thead>
+        @foreach (var property in Model.Class.Properties)
+        {
+            <th>@property.Name</th>
+        }
+        </thead>
+        <tbody>
+        @* @foreach (var element in Model.Elements) *@
+        @* { *@
+        @* <tr> *@
+        @* @foreach (var value in element.) *@
+        @* { *@
+        @* <td>a</td> *@
+        @* } *@
+        @* </tr> *@
+        @* } *@
+        <tr>
+            @foreach (var property in Model.Class.Properties)
+            {
+                <tr>
+                    <input type="text" name="@property.Name" placeholder="@property.Type value for @property.Name"/>
+                </tr>
+            }
+        </tr>
+        </tbody>
+    </table>
+    <input type="submit"/>
+</form>
+@* <a href="/property/@Model.Name">New property</a> *@
