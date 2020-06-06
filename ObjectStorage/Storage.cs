@@ -31,6 +31,7 @@ namespace ObjectStorage
             var optionsBuilder = new DbContextOptionsBuilder<ModelDbContext>();
             optionsBuilder.UseSqlite("Data Source=" + connectionString);
             _dbContext = new ModelDbContext(optionsBuilder.Options);
+            load();
         }
 
         public void rebuild()

@@ -8,8 +8,8 @@
       <PackageReference Include="DotLiquid" Version="2.0.325" />
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.6.0-3.final" />
       <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0-preview.3.20181.2" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.0-preview.3.20181.2" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.1" />
       <PackageReference Include="System.CodeDom" Version="5.0.0-preview.3.20214.6" />
       <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
     </ItemGroup>

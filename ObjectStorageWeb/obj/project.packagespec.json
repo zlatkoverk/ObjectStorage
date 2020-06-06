@@ -14,7 +14,11 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
-        "projectReferences": {}
+        "projectReferences": {
+          "/Users/zlatkoverk/RiderProjects/ObjectStorage/ObjectStorage/ObjectStorage.csproj": {
+            "projectPath": "/Users/zlatkoverk/RiderProjects/ObjectStorage/ObjectStorage/ObjectStorage.csproj"
+          }
+        }
       }
     },
     "warningProperties": {

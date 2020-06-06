@@ -12,6 +12,7 @@ using ObjectStorageWeb.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ObjectStorage.DbContext;
 
 namespace ObjectStorageWeb
 {
@@ -30,6 +31,10 @@ namespace ObjectStorageWeb
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ModelDbContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString("ModelConnection"),
+                    x => x.MigrationsAssembly("ObjectStorageWeb")));
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
