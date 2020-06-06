@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ObjectStorage;
 using ObjectStorage.DbContext;
+using ObjectStorage.MetaModel;
 using ObjectStorageWeb.Models;
 
 namespace ObjectStorageWeb.Controllers
@@ -15,17 +16,16 @@ namespace ObjectStorageWeb.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly Storage _storage;
-        private readonly ModelDbContext _modelContext;
 
-        public HomeController(ILogger<HomeController> logger, ModelDbContext modelContext)
+        public HomeController(ILogger<HomeController> logger, Storage storage)
         {
             _logger = logger;
-            _modelContext = modelContext;
+            _storage = storage;
         }
 
         public IActionResult Index()
         {
-            return View(new IndexViewModel() {Classes = _modelContext.Classes.ToList()});
+            return View(new IndexViewModel() {Classes = _storage.getClasses()});
         }
 
         public IActionResult Privacy()

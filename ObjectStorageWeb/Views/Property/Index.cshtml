@@ -1,0 +1,10 @@
+﻿@model ObjectStorage.MetaModel.Property
+@{
+    ViewData["Title"] = "Edit";
+}
+<h3>New property</h3>
+<form method="post">
+    <input asp-for="Name" placeholder="Insert Property Name"/>
+    <input asp-for="Type" placeholder="Insert Property Type"/>
+    <input type="submit"/>
+</form>

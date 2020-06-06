@@ -5,11 +5,20 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <h2>Entities</h2>
-    
+
     <ul>
         @foreach (var entity in Model.Classes)
         {
-            <li>@entity.Name</li>
+            <li>
+                @entity.Name
+                <a href="/class/@entity.Name">Edit</a>
+            </li>
         }
+        <li>
+            <form method="post" action="/class/">
+                <input name="Name" placeholder="New Class Name"/>
+            <input type="submit"/>
+            </form>
+        </li>
     </ul>
 </div>

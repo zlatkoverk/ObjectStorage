@@ -26,11 +26,9 @@ namespace ObjectStorage
         private dynamic _storageDbContext;
         private Dictionary<string, List<object>> _tableDictionary = new Dictionary<string, List<object>>();
 
-        public Storage(string connectionString)
+        public Storage(ModelDbContext dbContext)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<ModelDbContext>();
-            optionsBuilder.UseSqlite("Data Source=" + connectionString);
-            _dbContext = new ModelDbContext(optionsBuilder.Options);
+            _dbContext = dbContext;
             load();
         }
 
@@ -41,6 +39,39 @@ namespace ObjectStorage
         }
 
         public void addDefinition(Class c)
+        {
+            var o = _dbContext.Classes.Find(c.Name);
+            if (o == null)
+            {
+                _dbContext.Classes.Add(c);
+            }
+
+            _dbContext.SaveChanges();
+        }
+
+        public void addProperty(string className, Property property)
+        {
+            var c = _dbContext.Classes.Find(className);
+            c.Properties.Add(property);
+            _dbContext.SaveChanges();
+        }
+
+        public Class deleteProperty(Guid id)
+        {
+            var prop = _dbContext.Properties.Find(id);
+            var c = _dbContext.Classes.AsEnumerable().Single(c => c.Properties.Contains(prop));
+            _dbContext.Properties.Remove(prop);
+            c.Properties.Remove(prop);
+            _dbContext.SaveChanges();
+            return c;
+        }
+
+        public List<Class> getClasses()
+        {
+            return _dbContext.Classes.Include(c => c.Properties).ToList();
+        }
+
+        public void add(Class c)
         {
             _dbContext.Classes.Add(c);
             _dbContext.SaveChanges();

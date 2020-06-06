@@ -1,0 +1,21 @@
+﻿@model ObjectStorage.MetaModel.Class
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<form asp-action="Save" asp-controller="Class">
+    <h2>@Model.Name - Class Details</h2>
+    <h3>Properties</h3>
+    <ul>
+        @foreach (var property in Model.Properties)
+        {
+            <li>
+                @property.Type
+                @property.Name
+                <a href="/property/@property.Id/delete">Delete</a>
+            </li>
+        }
+    </ul>
+    <input type="submit"/>
+</form>
+<a href="/property/@Model.Name">New property</a>

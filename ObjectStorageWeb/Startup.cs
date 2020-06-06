@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using ObjectStorageWeb.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ObjectStorage;
 using ObjectStorage.DbContext;
 
 namespace ObjectStorageWeb
@@ -34,6 +36,8 @@ namespace ObjectStorageWeb
             services.AddDbContext<ModelDbContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("ModelConnection"),
                     x => x.MigrationsAssembly("ObjectStorageWeb")));
+
+            services.AddTransient<Storage, Storage>();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
