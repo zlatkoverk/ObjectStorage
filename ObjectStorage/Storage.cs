@@ -24,7 +24,7 @@ namespace ObjectStorage
     {
         private ModelDbContext _dbContext;
         private dynamic _storageDbContext;
-        private Dictionary<string, List<object>> _tableDictionary = new Dictionary<string, List<object>>();
+        private Dictionary<string, List<dynamic>> _tableDictionary = new Dictionary<string, List<dynamic>>();
 
         public Storage(ModelDbContext dbContext)
         {
@@ -90,17 +90,25 @@ namespace ObjectStorage
             foreach (var kvp in data)
             {
                 var prop = cl.Properties.First(e => e.Name == kvp.Key);
+                Type t = c.GetType().GetProperty(kvp.Key).PropertyType;
+                bool isPrimitiveType = t.IsPrimitive || t.IsValueType || (t == typeof(string));
 
-                // bool isPrimitiveType = t.IsPrimitive || t.IsValueType || (t == typeof(string));
-
-                // if (_dbContext.Classes.Find(type) != null)
-                // {
-
-                // }
-
-                c.GetType().GetProperty(kvp.Key)
-                    .SetValue(c, Convert.ChangeType(kvp.Value, c.GetType().GetProperty(kvp.Key).PropertyType), null);
-                Console.Out.WriteLine("kvp = {0}", kvp.Value);
+                if (!isPrimitiveType)
+                {
+                    var id = Guid.Parse(kvp.Value);
+                    dynamic d = _tableDictionary[prop.Type].Find(p => p.Id.Equals(id));
+                    c.GetType().GetProperty(kvp.Key)
+                        .SetValue(c, Convert.ChangeType(d, c.GetType().GetProperty(kvp.Key).PropertyType),
+                            null);
+                    Console.Out.WriteLine("kvp = {0}", id);
+                }
+                else
+                {
+                    c.GetType().GetProperty(kvp.Key)
+                        .SetValue(c, Convert.ChangeType(kvp.Value, c.GetType().GetProperty(kvp.Key).PropertyType),
+                            null);
+                    Console.Out.WriteLine("kvp = {0}", kvp.Value);
+                }
             }
 
             Console.Out.WriteLine("c = {0}", c.Id);
@@ -121,7 +129,7 @@ namespace ObjectStorage
             var classes = _dbContext.Classes.Include(e => e.Properties).ToList();
             foreach (var def in classes)
             {
-                _tableDictionary[def.Name] = new List<object>();
+                _tableDictionary[def.Name] = new List<dynamic>();
                 string classString = template.Render(Hash.FromAnonymousObject(new {data = def}));
                 dynamic c = DynamicClassLoader.createDynamicInstance(classString, "GeneratedClass." + def.Name);
                 Console.Out.WriteLine("Loaded class {0}", c.GetType());

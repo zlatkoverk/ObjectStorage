@@ -18,6 +18,15 @@ namespace ObjectStorage
         private static Dictionary<string, Assembly> assms = new Dictionary<string, Assembly>();
         private static Dictionary<string, string> classes = new Dictionary<string, string>();
 
+        static DynamicClassLoader()
+        {
+            var assemblyPaths = Directory.GetFiles(".", "MyLib*");
+            foreach (var path in assemblyPaths)
+            {
+                File.Delete(path);
+            }
+        }
+
         public static object createCachedInstance(string className)
         {
             return createDynamicInstance(classes[className], className);
@@ -29,6 +38,7 @@ namespace ObjectStorage
             {
                 return assms[className].CreateInstance(className);
             }
+
             var tree = SyntaxFactory.ParseSyntaxTree(code);
             string fileName = "mylib" + className + ".dll";
 
