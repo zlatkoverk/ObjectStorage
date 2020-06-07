@@ -14,7 +14,7 @@
         "outputPath": "/Users/zlatkoverk/RiderProjects/ObjectStorage/ObjectStorage/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/zlatkoverk/.nuget/NuGet/NuGet.Config"
+          "/Users/zlatkoverk/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -94,7 +94,7 @@
         "outputPath": "/Users/zlatkoverk/RiderProjects/ObjectStorage/ObjectStorageWeb/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/zlatkoverk/.nuget/NuGet/NuGet.Config"
+          "/Users/zlatkoverk/.config/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"

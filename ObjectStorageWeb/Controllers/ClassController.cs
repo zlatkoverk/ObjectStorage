@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ObjectStorage;
@@ -44,7 +45,7 @@ namespace ObjectStorageWeb.Controllers
         {
             var v = new OverviewViewModel();
             v.Class = _storage.getClasses().Find(c => c.Name.ToLower().Equals(className.ToLower()));
-            v.Elements = _storage.getEntities(v.Class);
+            v.Elements = _storage.getEntities(v.Class).Select(e => v.Class.Properties.ToDictionary(p=>p.Name, v=>e.GetType().GetProperty(v.Name).GetValue(e))).ToList();
             return View(v);
         }
         

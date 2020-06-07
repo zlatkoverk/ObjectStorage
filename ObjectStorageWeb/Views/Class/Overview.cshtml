@@ -4,7 +4,7 @@
 }
 <h3>@Model.Class.Name</h3>
 <form method="post" action="/class/@Model.Class.Name/">
-    <table>
+    <table border="1">
         <thead>
         @foreach (var property in Model.Class.Properties)
         {
@@ -12,15 +12,15 @@
         }
         </thead>
         <tbody>
-        @* @foreach (var element in Model.Elements) *@
-        @* { *@
-        @* <tr> *@
-        @* @foreach (var value in element.) *@
-        @* { *@
-        @* <td>a</td> *@
-        @* } *@
-        @* </tr> *@
-        @* } *@
+        @foreach (var element in Model.Elements)
+        {
+            <tr>
+                @foreach (var prop in Model.Class.Properties)
+                {
+                    <td>@element[prop.Name]</td>
+                }
+            </tr>
+        }
         <tr>
             @foreach (var property in Model.Class.Properties)
             {
