@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="randomdb" uuid="d6f81242-cd7d-4926-907f-77ef508f0fdf">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/ObjectStorageConsole/bin/Debug/netcoreapp3.1/random.db</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="generated" uuid="d6ef236f-f784-4990-84f0-65786af8df79">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/ObjectStorageConsole/bin/Debug/netcoreapp3.1/a.db</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="model.db" uuid="e5ee1097-fa43-430c-8ae7-636fa5c5188a">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/ObjectStorageWeb/model.db</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="a1.db" uuid="162e7a4c-4010-42e9-9b0d-fa3fd116a642">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/ObjectStorageWeb/a1.db</jdbc-url>
+    </data-source>
+  </component>
+</project>
