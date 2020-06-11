@@ -29,7 +29,8 @@ namespace ObjectStorage
         public Storage(ModelDbContext dbContext)
         {
             _dbContext = dbContext;
-            load();
+	    rebuild();
+	    load();
         }
 
         public void rebuild()
