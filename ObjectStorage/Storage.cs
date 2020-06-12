@@ -29,13 +29,13 @@ namespace ObjectStorage
         public Storage(ModelDbContext dbContext)
         {
             _dbContext = dbContext;
-	    rebuild();
-	    load();
+            build();
+            load();
         }
 
-        public void rebuild()
+        public void build()
         {
-            _dbContext.Database.EnsureDeleted();
+            // _dbContext.Database.EnsureDeleted();
             _dbContext.Database.EnsureCreated();
         }
 
