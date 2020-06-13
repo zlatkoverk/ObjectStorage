@@ -5,11 +5,6 @@
         <UserSecretsId>aspnet-ObjectStorageWeb-B16E90CC-E511-4747-83EB-195B534D3317</UserSecretsId>
     </PropertyGroup>
 
-
-    <ItemGroup>
-        <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
-    </ItemGroup>
-
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.1" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.1" />
