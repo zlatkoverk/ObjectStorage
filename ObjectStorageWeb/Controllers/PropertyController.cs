@@ -11,11 +11,13 @@ namespace ObjectStorageWeb.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly Storage _storage;
+        private readonly StorageState _state;
 
-        public PropertyController(ILogger<HomeController> logger, Storage storage)
+        public PropertyController(ILogger<HomeController> logger, Storage storage, StorageState state)
         {
             _logger = logger;
             _storage = storage;
+            _state = state;
         }
 
         [HttpGet("/property/{className}")]
@@ -28,6 +30,7 @@ namespace ObjectStorageWeb.Controllers
         public IActionResult Delete(string id)
         {
             var c = _storage.deleteProperty(Guid.Parse(id));
+            _state.Valid = false;
             return RedirectPermanent($"/class/{c.Name}");
         }
 
@@ -35,6 +38,7 @@ namespace ObjectStorageWeb.Controllers
         public IActionResult Save(string className, [FromForm] Property p)
         {
             _storage.addProperty(className, p);
+            _state.Valid = false;
             return RedirectPermanent($"/class/{className}");
         }
     }

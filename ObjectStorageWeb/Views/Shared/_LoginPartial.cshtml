@@ -1,10 +1,18 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using ObjectStorage
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@inject StorageState State
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
+    @if (!State.Valid)
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" href="/shutdown/">Restart App</a>
+        </li>
+    }
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
     </li>

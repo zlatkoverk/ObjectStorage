@@ -38,6 +38,7 @@ namespace ObjectStorageWeb
                     x => x.MigrationsAssembly("ObjectStorageWeb")));
 
             services.AddTransient<Storage, Storage>();
+            services.AddSingleton<StorageState>();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
