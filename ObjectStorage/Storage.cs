@@ -171,7 +171,7 @@ namespace ObjectStorage
             foreach (var def in classes)
             {
                 _tableDictionary[def.Name] = new List<dynamic>();
-                string classString = template.Render(Hash.FromAnonymousObject(new {data = def}));
+                string classString = template.Render(Hash.FromAnonymousObject(new {data = def, presentationProperty = def.PresentationProperty}));
                 dynamic c = DynamicClassLoader.createDynamicInstance(classString, "GeneratedClass." + def.Name);
                 if (c == null)
                 {

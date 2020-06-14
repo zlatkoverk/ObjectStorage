@@ -17,8 +17,13 @@ namespace GeneratedClass
         public {{ property.Type }} {{ property.Name }} { get; set; }
     {% endfor -%}
     
-        public int Print() {
-            return 3;    
+        public override string ToString()
+        { 
+            {% if presentationProperty != null and presentationProperty.Name != null %}
+                return {{ presentationProperty.Name }};
+            {% else %}
+                return base.ToString();
+            {% endif %}
         }
     }
 }

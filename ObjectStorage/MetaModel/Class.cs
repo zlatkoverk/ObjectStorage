@@ -9,5 +9,6 @@ namespace ObjectStorage.MetaModel
     {
         [Key] public string Name { get; set; }
         public IList<Property> Properties { get; set; } = new List<Property>();
+        public Property PresentationProperty { get; set; }
     }
 }
