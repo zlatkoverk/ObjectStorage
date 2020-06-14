@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ObjectStorage;
@@ -10,6 +11,7 @@ using ObjectStorageWeb.Models;
 
 namespace ObjectStorageWeb.Controllers
 {
+    [Authorize]
     public class ClassController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -35,7 +37,7 @@ namespace ObjectStorageWeb.Controllers
 
             return View(c);
         }
-        
+
         [HttpPost("/class/")]
         public IActionResult Save([FromForm] Class c)
         {
@@ -44,23 +46,32 @@ namespace ObjectStorageWeb.Controllers
             return RedirectPermanent($"/class/{c.Name}");
         }
 
+        [AllowAnonymous]
         [HttpGet("/class/{className}/overview")]
         public IActionResult Overview(string className)
         {
             var v = new OverviewViewModel();
             v.Class = _storage.getClasses().Find(c => c.Name.ToLower().Equals(className.ToLower()));
-            v.Elements = _storage.getEntities(v.Class).Select(e => v.Class.Properties.ToDictionary(p=>p.Name, v=>e.GetType().GetProperty(v.Name).GetValue(e))).ToList();
+            v.Elements = _storage.getEntities(v.Class).Select(e =>
+                    v.Class.Properties.ToDictionary(p => p.Name, v => e.GetType().GetProperty(v.Name).GetValue(e)))
+                .ToList();
             return View(v);
         }
-        
+
         [HttpPost("/class/{className}")]
         public IActionResult Add(string className, [FromForm] Dictionary<string, string> data)
         {
+            if (!_state.Valid)
+            {
+                return RedirectPermanent("/shutdown");
+            }
+
             foreach (KeyValuePair<string, string> kvp in data)
             {
                 //textBox3.Text += ("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
                 Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
             }
+
             _storage.addElement(className, data);
             return RedirectPermanent($"/class/{className}/overview");
         }

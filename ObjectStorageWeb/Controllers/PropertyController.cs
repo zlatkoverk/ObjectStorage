@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ObjectStorage;
@@ -7,6 +8,7 @@ using ObjectStorageWeb.Models;
 
 namespace ObjectStorageWeb.Controllers
 {
+    [Authorize]
     public class PropertyController : Controller
     {
         private readonly ILogger<HomeController> _logger;

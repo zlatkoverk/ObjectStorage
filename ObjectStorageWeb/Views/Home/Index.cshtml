@@ -1,6 +1,8 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@{
     ViewData["Title"] = "Home";
 }
+@inject SignInManager<IdentityUser> SignInManager
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
@@ -11,14 +13,21 @@
         {
             <li>
                 @entity.Name
-                <a href="/class/@entity.Name">Edit</a>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <a href="/class/@entity.Name">Edit</a>
+                }
+                <a href="/class/@entity.Name/overview">Overview</a>
             </li>
         }
-        <li>
-            <form method="post" action="/class/">
-                <input name="Name" placeholder="New Class Name"/>
-            <input type="submit"/>
-            </form>
-        </li>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <li>
+                <form method="post" action="/class/">
+                    <input name="Name" placeholder="New Class Name"/>
+                    <input type="submit"/>
+                </form>
+            </li>
+        }
     </ul>
 </div>
