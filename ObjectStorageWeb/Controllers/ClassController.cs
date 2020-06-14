@@ -46,6 +46,26 @@ namespace ObjectStorageWeb.Controllers
             return RedirectPermanent($"/class/{c.Name}");
         }
 
+        [HttpPost("/class/{className}/presentationProperty")]
+        public IActionResult PresentationProperty(string className, [FromForm] Dictionary<string, string> data)
+        {
+            var c = _storage.getClasses().Find(c => c.Name.ToLower().Equals(className.ToLower()));
+
+            Guid id;
+            if (Guid.TryParse(data["PresentationProperty"], out id))
+            {
+                var p = c.Properties.First(p => p.Id == id);
+                if (p != null)
+                {
+                    c.PresentationProperty = p;
+                    _storage.addDefinition(c);
+                    _state.Valid = false;
+                }
+            }
+
+            return RedirectPermanent($"/class/{c.Name}");
+        }
+
         [AllowAnonymous]
         [HttpGet("/class/{className}/overview")]
         public IActionResult Overview(string className)

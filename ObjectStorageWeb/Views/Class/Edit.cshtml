@@ -1,9 +1,10 @@
-﻿@model ObjectStorage.MetaModel.Class
+﻿@using Microsoft.AspNetCore.Mvc.Filters
+@model ObjectStorage.MetaModel.Class
 @{
     ViewData["Title"] = "Edit";
 }
 
-<form asp-action="Save" asp-controller="Class">
+<form method="post" action="/class/@Model.Name/presentationProperty">
     <h2>@Model.Name - Class Details</h2>
     <h3>Properties</h3>
     <ul>
@@ -16,6 +17,21 @@
             </li>
         }
     </ul>
+    Presentation property:
+    <select name="PresentationProperty">
+        <option></option>
+        @foreach (var property in Model.Properties)
+        {
+            @if (Model.PresentationProperty != null && Model.PresentationProperty.Id.Equals(property.Id))
+            {
+                <option value="@property.Id" selected="selected">@property.Name</option>
+            }
+            else
+            {
+                <option value="@property.Id">@property.Name</option>
+            }
+        }
+    </select>
     <input type="submit"/>
 </form>
 <a href="/property/@Model.Name">New property</a>
