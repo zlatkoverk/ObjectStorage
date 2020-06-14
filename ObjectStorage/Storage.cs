@@ -128,13 +128,7 @@ namespace ObjectStorage
             Template template = Template.Parse(File.ReadAllText(templatePath));
 
             var classes = _dbContext.Classes.Include(e => e.Properties).ToList();
-            foreach (var def in classes)
-            {
-                _tableDictionary[def.Name] = new List<dynamic>();
-                string classString = template.Render(Hash.FromAnonymousObject(new {data = def}));
-                dynamic c = DynamicClassLoader.createDynamicInstance(classString, "GeneratedClass." + def.Name);
-                Console.Out.WriteLine("Loaded class {0}", c.GetType());
-            }
+            loadAssemblies(classes, template);
 
             templatePath = Path.Combine(baseDir, "Template/DbContextTemplate.liquid");
             template = Template.Parse(File.ReadAllText(templatePath));
@@ -164,6 +158,31 @@ namespace ObjectStorage
                 _storageDbContext.Database.EnsureDeleted();
                 _storageDbContext.Database.EnsureCreated();
             }
+        }
+
+        private void loadAssemblies(List<Class> classes, Template template)
+        {
+            if (classes.Count == 0)
+            {
+                return;
+            }
+
+            var skipped = new List<Class>();
+            foreach (var def in classes)
+            {
+                _tableDictionary[def.Name] = new List<dynamic>();
+                string classString = template.Render(Hash.FromAnonymousObject(new {data = def}));
+                dynamic c = DynamicClassLoader.createDynamicInstance(classString, "GeneratedClass." + def.Name);
+                if (c == null)
+                {
+                    skipped.Add(def);
+                    continue;
+                }
+
+                Console.Out.WriteLine("Loaded class {0}", c.GetType());
+            }
+
+            loadAssemblies(skipped, template);
         }
     }
 }
