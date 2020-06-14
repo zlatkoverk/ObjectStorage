@@ -75,6 +75,16 @@ namespace ObjectStorageWeb.Controllers
             v.Elements = _storage.getEntities(v.Class).Select(e =>
                     v.Class.Properties.ToDictionary(p => p.Name, v => e.GetType().GetProperty(v.Name).GetValue(e)))
                 .ToList();
+            v.Options = new Dictionary<string, List<object>>();
+            foreach (var property in v.Class.Properties)
+            {
+                var c = _storage.getClasses().Find(c => c.Name.ToLower().Equals(property.Type.ToLower()));
+                if (c != null)
+                {
+                    v.Options[property.Name] = _storage.getEntities(c).ToList();
+                }
+            }
+
             return View(v);
         }
 

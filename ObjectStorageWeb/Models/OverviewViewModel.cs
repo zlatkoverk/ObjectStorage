@@ -7,5 +7,6 @@ namespace ObjectStorageWeb.Models
     {
         public Class Class { get; set; }
         public List<Dictionary<string, object>> Elements { get; set; }
+        public Dictionary<string, List<dynamic>> Options { get; set; }
     }
 }

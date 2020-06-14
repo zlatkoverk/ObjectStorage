@@ -25,7 +25,19 @@
             @foreach (var property in Model.Class.Properties)
             {
                 <tr>
-                    <input type="text" name="@property.Name" placeholder="@property.Type value for @property.Name"/>
+                    @if (Model.Options.ContainsKey(property.Name))
+                    {
+                        <select name="@property.Name">
+                            @foreach (var option in Model.Options[property.Name])
+                            {
+                                <option value="@option.Id">@option</option>
+                            }
+                        </select>
+                    }
+                    else
+                    {
+                        <input type="text" name="@property.Name" placeholder="@property.Type value for @property.Name"/>
+                    }
                 </tr>
             }
         </tr>
