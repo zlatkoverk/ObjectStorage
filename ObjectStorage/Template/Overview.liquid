@@ -21,5 +21,26 @@
                 </td>
             </tr>
         {% endfor -%}
+        
+        <form method="post" action="/class/{{Model.Class.Name}}?redirectTo=/entity/{{Model.Class.Name}}/overview">
+        <tr>
+        {% for property in Model.Class.Properties -%}
+                        <td>
+                            {% if Model.Options[property.Name] -%}
+                                <select name="{{property.Name}}">
+                                    {% for option in Model.Options[property.Name] -%}
+                                        <option value="{{option.Id}}">{{option}}</option>
+                                    {% endfor -%}   
+                                </select>
+                            {% else -%}
+                                <input type="text" name="{{property.Name}}" placeholder="{{property.Type}} value for {{property.Name}}"/>
+                            {% endif -%}
+                        </td>
+        {% endfor -%}
+                        <td>
+                        <input type="submit"/>
+                        </td>
+        </tr>
+        <form>
         </tbody>
 </table>

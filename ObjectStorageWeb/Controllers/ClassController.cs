@@ -89,7 +89,8 @@ namespace ObjectStorageWeb.Controllers
         }
 
         [HttpPost("/class/{className}")]
-        public IActionResult Add(string className, [FromForm] Dictionary<string, string> data)
+        public IActionResult Add(string className, [FromForm] Dictionary<string, string> data,
+            [FromQuery(Name = "redirectTo")] string redirectTo = "")
         {
             if (!_state.Valid)
             {
@@ -103,7 +104,7 @@ namespace ObjectStorageWeb.Controllers
             }
 
             _storage.addElement(className, data);
-            return RedirectPermanent($"/class/{className}/overview");
+            return RedirectPermanent(redirectTo == "" ? $"/class/{className}/overview" : redirectTo);
         }
     }
 }
