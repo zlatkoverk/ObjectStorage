@@ -21,6 +21,9 @@
         <None Update="Template\DbContextTemplate.liquid">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="Template\Overview.liquid">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>

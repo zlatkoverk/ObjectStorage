@@ -1,0 +1,25 @@
+<table border="1">
+        <thead>
+        {% for property in Model.Class.Properties -%}
+        
+            <th>{{ property.Name }}</th>
+      
+        {% endfor -%}
+        </thead>
+        <tbody>
+        {% for element in Model.Elements -%}
+        
+        
+            <tr>
+        {% for property in Model.Class.Properties -%}
+
+                <td>{{ element[property.Name] }}</td>
+
+        {% endfor -%}
+                <td>
+                    <a href="/entity/{{Model.Class.Name}}/{{Element["Id"]}}">Edit</a>
+                </td>
+            </tr>
+        {% endfor -%}
+        </tbody>
+</table>
