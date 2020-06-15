@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
+using DotLiquid;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
@@ -56,6 +57,7 @@ namespace ObjectStorage
                 MetadataReference.CreateFromFile(Assembly.Load("netstandard, Version=2.0.0.0").Location),
                 MetadataReference.CreateFromFile(Assembly.Load("System.Runtime, Version=4.2.2.0").Location),
                 MetadataReference.CreateFromFile(Assembly.Load("System.Data.Common, Version=4.2.2.0").Location),
+                MetadataReference.CreateFromFile(typeof(ILiquidizable).Assembly.Location),
                 //TODO: HERE ADD STUFF
             };
             refs.AddRange(assms.Select(a => MetadataReference.CreateFromFile(a.Value.Location)));

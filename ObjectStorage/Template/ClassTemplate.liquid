@@ -5,11 +5,12 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using DotLiquid;
 
 namespace GeneratedClass
 {
     [Table("data-{{ data.Name }}")]
-    public class {{data.Name}}
+    public class {{data.Name}} : ILiquidizable
     {
         [Key]
         public Guid Id { get; set; }
@@ -24,6 +25,11 @@ namespace GeneratedClass
             {% else %}
                 return base.ToString();
             {% endif %}
+        }
+        
+        public object ToLiquid()
+        {
+            return this.ToString();
         }
     }
 }
