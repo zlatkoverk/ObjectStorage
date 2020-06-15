@@ -21,7 +21,15 @@ namespace ObjectStorageWeb.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("OverviewTemplate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("PresentationPropertyId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Name");
+
+                    b.HasIndex("PresentationPropertyId");
 
                     b.ToTable("model-classes");
                 });
@@ -46,6 +54,13 @@ namespace ObjectStorageWeb.Migrations
                     b.HasIndex("ClassName");
 
                     b.ToTable("model-properties");
+                });
+
+            modelBuilder.Entity("ObjectStorage.MetaModel.Class", b =>
+                {
+                    b.HasOne("ObjectStorage.MetaModel.Property", "PresentationProperty")
+                        .WithMany()
+                        .HasForeignKey("PresentationPropertyId");
                 });
 
             modelBuilder.Entity("ObjectStorage.MetaModel.Property", b =>

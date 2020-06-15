@@ -4,20 +4,20 @@
     ViewData["Title"] = "Edit";
 }
 
+<h2>@Model.Name - Class Details</h2>
+<h3>Properties</h3>
+<ul>
+    @foreach (var property in Model.Properties)
+    {
+        <li>
+            @property.Type
+            @property.Name
+            <a href="/property/@property.Id/delete">Delete</a>
+        </li>
+    }
+</ul>
+Presentation property:
 <form method="post" action="/class/@Model.Name/presentationProperty">
-    <h2>@Model.Name - Class Details</h2>
-    <h3>Properties</h3>
-    <ul>
-        @foreach (var property in Model.Properties)
-        {
-            <li>
-                @property.Type
-                @property.Name
-                <a href="/property/@property.Id/delete">Delete</a>
-            </li>
-        }
-    </ul>
-    Presentation property:
     <select name="PresentationProperty">
         <option></option>
         @foreach (var property in Model.Properties)
@@ -36,3 +36,9 @@
 </form>
 <a href="/property/@Model.Name">New property</a>
 <a href="/class/@Model.Name/overview">Overview</a>
+
+<form method="post" action="/class/">
+    <textarea name="OverviewTemplate">@Model.OverviewTemplate</textarea>
+    <input type="hidden" name="Name" value="@Model.Name">
+    <input type="submit"/>
+</form>

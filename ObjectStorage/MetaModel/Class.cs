@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
+using System.Reflection;
 
 namespace ObjectStorage.MetaModel
 {
@@ -10,5 +12,8 @@ namespace ObjectStorage.MetaModel
         [Key] public string Name { get; set; }
         public IList<Property> Properties { get; set; } = new List<Property>();
         public Property PresentationProperty { get; set; }
+        public string OverviewTemplate { get; set; } = File.ReadAllText(Path.Combine(
+            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+            "Template/Overview.liquid"));
     }
 }

@@ -46,6 +46,10 @@ namespace ObjectStorage
             {
                 _dbContext.Classes.Add(c);
             }
+            else
+            {
+                o.OverviewTemplate = c.OverviewTemplate;
+            }
 
             _dbContext.SaveChanges();
         }
@@ -120,7 +124,7 @@ namespace ObjectStorage
 
         public void load()
         {
-            Template.RegisterSafeType(typeof(Class), new[] {"Name", "Properties"});
+            Template.RegisterSafeType(typeof(Class), new[] {"Name", "Properties", "OverviewTemplate"});
             Template.RegisterSafeType(typeof(Property), new[] {"Name", "Type"});
 
             string baseDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -171,7 +175,8 @@ namespace ObjectStorage
             foreach (var def in classes)
             {
                 _tableDictionary[def.Name] = new List<dynamic>();
-                string classString = template.Render(Hash.FromAnonymousObject(new {data = def, presentationProperty = def.PresentationProperty}));
+                string classString = template.Render(Hash.FromAnonymousObject(new
+                    {data = def, presentationProperty = def.PresentationProperty}));
                 dynamic c = DynamicClassLoader.createDynamicInstance(classString, "GeneratedClass." + def.Name);
                 if (c == null)
                 {

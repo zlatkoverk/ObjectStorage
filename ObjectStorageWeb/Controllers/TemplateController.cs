@@ -19,14 +19,13 @@ namespace ObjectStorageWeb.Controllers
             _storage = storage;
         }
 
-        public IActionResult Index()
+        [HttpGet("/entity/{className}/overview")]
+        public IActionResult Index(string className)
         {
-            var className = "Processor";
+            var o = _storage.getClasses().Find(c => c.Name.ToLower().Equals(className.ToLower()));
             Template.RegisterSafeType(typeof(OverviewViewModel), new[] {"Class", "Elements", "Options"});
 
-            var template = Template.Parse(System.IO.File.ReadAllText(Path.Combine(
-                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                "Template/Overview.liquid")));
+            var template = Template.Parse(o.OverviewTemplate);
 
             var v = new OverviewViewModel();
             v.Class = _storage.getClasses().Find(c => c.Name.ToLower().Equals(className.ToLower()));
