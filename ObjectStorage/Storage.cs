@@ -122,6 +122,21 @@ namespace ObjectStorage
             _storageDbContext.SaveChanges();
         }
 
+        public void removeElement(string type, string id)
+        {
+            Guid guid;
+            if (!Guid.TryParse(id, out guid))
+            {
+                return;
+            }
+
+            var element = _tableDictionary[type].Find(v => v.Id == guid);
+            
+            dynamic dbset = _storageDbContext.GetType().GetProperty(type).GetValue(_storageDbContext, null);
+            dbset.GetType().GetMethod("Remove").Invoke(dbset, new[] {element});
+            _storageDbContext.SaveChanges();
+        }
+
         public void load()
         {
             Template.RegisterSafeType(typeof(Class), new[] {"Name", "Properties", "OverviewTemplate"});

@@ -45,6 +45,13 @@ namespace ObjectStorageWeb.Controllers
             _state.Valid = false;
             return RedirectPermanent($"/class/{c.Name}");
         }
+        
+        [HttpGet("/class/{className}/delete/{id}")]
+        public IActionResult Delete(string className, string id, [FromQuery(Name = "redirectTo")] string redirectTo = "")
+        {
+            _storage.removeElement(className, id);
+            return RedirectPermanent(redirectTo == "" ? $"/class/{className}/overview" : redirectTo);
+        }
 
         [HttpPost("/class/{className}/presentationProperty")]
         public IActionResult PresentationProperty(string className, [FromForm] Dictionary<string, string> data)

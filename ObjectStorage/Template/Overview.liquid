@@ -19,6 +19,9 @@
                 <td>
                     <a href="/entity/{{Model.Class.Name}}/{{Element["Id"]}}">Edit</a>
                 </td>
+                <td>
+                    <a href="/class/{{Model.Class.Name}}/delete/{{Element["Id"]}}?redirectTo=/entity/{{Model.Class.Name}}/overview">Delete</a>
+                </td>
             </tr>
         {% endfor -%}
         
