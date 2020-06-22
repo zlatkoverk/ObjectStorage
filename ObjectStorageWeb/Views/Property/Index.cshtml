@@ -1,10 +1,15 @@
-﻿@model ObjectStorage.MetaModel.Property
+﻿@model List<String>
 @{
     ViewData["Title"] = "Edit";
 }
 <h3>New property</h3>
 <form method="post">
-    <input asp-for="Name" placeholder="Insert Property Name"/>
-    <input asp-for="Type" placeholder="Insert Property Type"/>
+    <input name="Name" placeholder="Insert Property Name" required="required"/>
+    <select name="Type" required="required">
+        @foreach (var type in Model)
+        {
+            <option value="@type">@type</option>
+        }
+    </select>
     <input type="submit"/>
 </form>

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -25,7 +27,9 @@ namespace ObjectStorageWeb.Controllers
         [HttpGet("/property/{className}")]
         public IActionResult Index(string className)
         {
-            return View(new Property());
+            var types = new List<string> {"string", "int", "float"};
+            types.AddRange(_storage.getClasses().Select(c => c.Name));
+            return View(types);
         }
 
         [HttpGet("/property/{id}/delete")]
