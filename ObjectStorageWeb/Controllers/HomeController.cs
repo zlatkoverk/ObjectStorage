@@ -28,11 +28,6 @@ namespace ObjectStorageWeb.Controllers
             return View(new IndexViewModel() {Classes = _storage.getClasses()});
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
