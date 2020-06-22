@@ -34,11 +34,15 @@ Presentation property:
     </select>
     <input type="submit"/>
 </form>
+<br/>
 <a href="/property/@Model.Name">New property</a>
-<a href="/class/@Model.Name/overview">Overview</a>
+<a href="/entity/@Model.Name/overview">View</a>
+<br/>
 
+<h3>Edit templates</h3>
 <form method="post" action="/class/">
-    <textarea name="OverviewTemplate">@Model.OverviewTemplate</textarea>
+    <label>Overview template</label><textarea name="OverviewTemplate">@Model.OverviewTemplate</textarea>
+    <label>Details template</label><textarea name="DetailsTemplate">@Model.DetailsTemplate</textarea>
     <input type="hidden" name="Name" value="@Model.Name">
     <input type="submit"/>
 </form>

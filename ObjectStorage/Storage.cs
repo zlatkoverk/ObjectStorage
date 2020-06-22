@@ -49,6 +49,7 @@ namespace ObjectStorage
             else
             {
                 o.OverviewTemplate = c.OverviewTemplate;
+                o.DetailsTemplate = c.DetailsTemplate;
             }
 
             _dbContext.SaveChanges();
