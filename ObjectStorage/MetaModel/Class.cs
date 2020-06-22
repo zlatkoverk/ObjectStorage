@@ -15,5 +15,8 @@ namespace ObjectStorage.MetaModel
         public string OverviewTemplate { get; set; } = File.ReadAllText(Path.Combine(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
             "Template/Overview.liquid"));
+        public string DetailsTemplate { get; set; } = File.ReadAllText(Path.Combine(
+            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+            "Template/Details.liquid"));
     }
 }

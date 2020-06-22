@@ -7,23 +7,17 @@
         {% endfor -%}
         </thead>
         <tbody>
-        {% for element in Model.Elements -%}
-        
-        
-            <tr>
         {% for property in Model.Class.Properties -%}
 
-                <td>{{ element[property.Name] }}</td>
+                <td>{{ Model.Element[property.Name] }}</td>
 
         {% endfor -%}
                 <td>
-                    <a href="/entity/{{Model.Class.Name}}/{{Element["Id"]}}">Edit</a>
+                    <a href="/entity/{{Model.Class.Name}}/{{Model.Element["Id"]}}">Edit</a>
                 </td>
                 <td>
-                    <a href="/class/{{Model.Class.Name}}/delete/{{Element["Id"]}}?redirectTo=/entity/{{Model.Class.Name}}/overview">Delete</a>
+                    <a href="/class/{{Model.Class.Name}}/delete/{{Model.Element["Id"]}}?redirectTo=/entity/{{Model.Class.Name}}/overview">Delete</a>
                 </td>
-            </tr>
-        {% endfor -%}
         
         <form method="post" action="/class/{{Model.Class.Name}}?redirectTo=/entity/{{Model.Class.Name}}/overview">
         <tr>
@@ -43,7 +37,6 @@
                         <td>
                         <input type="submit"/>
                         </td>
-        </tr>
         <form>
         </tbody>
 </table>

@@ -21,6 +21,9 @@ namespace ObjectStorageWeb.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("DetailsTemplate")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("OverviewTemplate")
                         .HasColumnType("TEXT");
 

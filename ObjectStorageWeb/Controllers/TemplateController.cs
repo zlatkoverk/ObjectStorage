@@ -24,6 +24,7 @@ namespace ObjectStorageWeb.Controllers
         {
             var o = _storage.getClasses().Find(c => c.Name.ToLower().Equals(className.ToLower()));
             Template.RegisterSafeType(typeof(OverviewViewModel), new[] {"Class", "Elements", "Options"});
+            Template.RegisterSafeType(typeof(OptionViewModel), new[] {"Id", "Value"});
 
             var template = Template.Parse(o.OverviewTemplate);
 
@@ -37,17 +38,63 @@ namespace ObjectStorageWeb.Controllers
                     return dict;
                 })
                 .ToList();
-            v.Options = new Dictionary<string, List<object>>();
+            v.Options = new Dictionary<string, List<OptionViewModel>>();
             foreach (var property in v.Class.Properties)
             {
                 var c = _storage.getClasses().Find(c => c.Name.ToLower().Equals(property.Type.ToLower()));
                 if (c != null)
                 {
-                    v.Options[property.Name] = _storage.getEntities(c).ToList();
+                    v.Options[property.Name] =
+                        _storage.getEntities(c).Select(e => new OptionViewModel() {Object = e}).ToList();                }
+            }
+
+            var render = template.Render(Hash.FromAnonymousObject(new {Model = v}));
+            return new ContentResult()
+            {
+                Content = render, ContentType = "text/html"
+            };
+        }
+
+        [HttpGet("/entity/{className}/{entityId}")]
+        public IActionResult Index(string className, string entityId)
+        {
+            var o = _storage.getClasses().Find(c => c.Name.ToLower().Equals(className.ToLower()));
+            Template.RegisterSafeType(typeof(DetailsViewModel), new[] {"Class", "Element", "Options"});
+            Template.RegisterSafeType(typeof(OptionViewModel), new[] {"Id", "Value"});
+
+            Guid id;
+            if (!Guid.TryParse(entityId, out id))
+            {
+                return new NotFoundResult();
+            }
+
+            var template = Template.Parse(System.IO.File.ReadAllText(Path.Combine(
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                "Template/Details.liquid")));
+
+            var v = new DetailsViewModel();
+            v.Class = _storage.getClasses().Find(c => c.Name.ToLower().Equals(className.ToLower()));
+            v.Element = _storage.getEntities(v.Class)
+                .FindAll(e => e.GetType().GetProperty("Id").GetValue(e).Equals(id)).Select(e =>
+                {
+                    var dict = v.Class.Properties.ToDictionary(p => p.Name,
+                        v => e.GetType().GetProperty(v.Name).GetValue(e));
+                    dict.Add("Id", e.GetType().GetProperty("Id").GetValue(e));
+                    return dict;
+                }).First();
+            v.Options = new Dictionary<string, List<OptionViewModel>>();
+            foreach (var property in v.Class.Properties)
+            {
+                var c = _storage.getClasses().Find(c => c.Name.ToLower().Equals(property.Type.ToLower()));
+                if (c != null)
+                {
+                    v.Options[property.Name] =
+                        _storage.getEntities(c).Select(e => new OptionViewModel() {Object = e}).ToList();
                 }
             }
 
             var render = template.Render(Hash.FromAnonymousObject(new {Model = v}));
+
             return new ContentResult()
             {
                 Content = render, ContentType = "text/html"
