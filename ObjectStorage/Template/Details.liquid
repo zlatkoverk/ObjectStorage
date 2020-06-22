@@ -7,30 +7,23 @@
         {% endfor -%}
         </thead>
         <tbody>
-        {% for property in Model.Class.Properties -%}
-
-                <td>{{ Model.Element[property.Name] }}</td>
-
-        {% endfor -%}
-                <td>
-                    <a href="/entity/{{Model.Class.Name}}/{{Model.Element["Id"]}}">Edit</a>
-                </td>
-                <td>
-                    <a href="/class/{{Model.Class.Name}}/delete/{{Model.Element["Id"]}}?redirectTo=/entity/{{Model.Class.Name}}/overview">Delete</a>
-                </td>
-        
-        <form method="post" action="/class/{{Model.Class.Name}}?redirectTo=/entity/{{Model.Class.Name}}/overview">
+    
+        <form method="post" action="/class/{{Model.Class.Name}}/{{Model.Element["Id"]}}?redirectTo=/entity/{{Model.Class.Name}}/overview">
         <tr>
         {% for property in Model.Class.Properties -%}
                         <td>
                             {% if Model.Options[property.Name] -%}
                                 <select name="{{property.Name}}">
                                     {% for option in Model.Options[property.Name] -%}
-                                        <option value="{{option.Id}}">{{option.Value}}</option>
+                                        {% if Model.Element[property.Name] == option.Value -%}
+                                            <option value="{{option.Id}}" selected="selected">{{option.Value}}</option>
+                                        {% else -%}
+                                            <option value="{{option.Id}}">{{option.Value}}</option>
+                                        {% endif -%}
                                     {% endfor -%}   
                                 </select>
                             {% else -%}
-                                <input type="text" name="{{property.Name}}" placeholder="{{property.Type}} value for {{property.Name}}"/>
+                                <input type="text" name="{{property.Name}}" value="{{ Model.Element[property.Name] }}"/>
                             {% endif -%}
                         </td>
         {% endfor -%}

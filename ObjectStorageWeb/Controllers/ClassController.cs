@@ -45,9 +45,10 @@ namespace ObjectStorageWeb.Controllers
             _state.Valid = false;
             return RedirectPermanent($"/class/{c.Name}");
         }
-        
+
         [HttpGet("/class/{className}/delete/{id}")]
-        public IActionResult Delete(string className, string id, [FromQuery(Name = "redirectTo")] string redirectTo = "")
+        public IActionResult Delete(string className, string id,
+            [FromQuery(Name = "redirectTo")] string redirectTo = "")
         {
             _storage.removeElement(className, id);
             return RedirectPermanent(redirectTo == "" ? $"/class/{className}/overview" : redirectTo);
@@ -89,7 +90,8 @@ namespace ObjectStorageWeb.Controllers
                 if (c != null)
                 {
                     v.Options[property.Name] =
-                        _storage.getEntities(c).Select(e => new OptionViewModel() {Object = e}).ToList();                }
+                        _storage.getEntities(c).Select(e => new OptionViewModel() {Object = e}).ToList();
+                }
             }
 
             return View(v);
@@ -104,14 +106,21 @@ namespace ObjectStorageWeb.Controllers
                 return RedirectPermanent("/shutdown");
             }
 
-            foreach (KeyValuePair<string, string> kvp in data)
+            _storage.addElement(className, data);
+            return RedirectPermanent(redirectTo == "" ? $"/entity/{className}/overview" : redirectTo);
+        }
+
+        [HttpPost("/class/{className}/{entityId}")]
+        public IActionResult Edit(string className, [FromForm] Dictionary<string, string> data, string entityId,
+            [FromQuery(Name = "redirectTo")] string redirectTo = "")
+        {
+            if (!_state.Valid)
             {
-                //textBox3.Text += ("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
-                Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+                return RedirectPermanent("/shutdown");
             }
 
-            _storage.addElement(className, data);
-            return RedirectPermanent(redirectTo == "" ? $"/class/{className}/overview" : redirectTo);
+            _storage.editElement(className, data, entityId);
+            return RedirectPermanent(redirectTo == "" ? $"/entity/{className}/overview" : redirectTo);
         }
     }
 }

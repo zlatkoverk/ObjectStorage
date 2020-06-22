@@ -68,9 +68,7 @@ namespace ObjectStorageWeb.Controllers
                 return new NotFoundResult();
             }
 
-            var template = Template.Parse(System.IO.File.ReadAllText(Path.Combine(
-                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                "Template/Details.liquid")));
+            var template = Template.Parse(o.DetailsTemplate);
 
             var v = new DetailsViewModel();
             v.Class = _storage.getClasses().Find(c => c.Name.ToLower().Equals(className.ToLower()));

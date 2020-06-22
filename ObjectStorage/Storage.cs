@@ -121,6 +121,38 @@ namespace ObjectStorage
             dbset.GetType().GetMethod("Add").Invoke(dbset, new[] {c});
             _storageDbContext.SaveChanges();
         }
+        public void editElement(string type, Dictionary<string, string> data, string entityId)
+        {
+            dynamic c = _tableDictionary[type].Find(e => e.Id.ToString().Equals(entityId));
+            var cl = getClasses().Find(e => e.Name == type);
+
+            foreach (var kvp in data)
+            {
+                var prop = cl.Properties.First(e => e.Name == kvp.Key);
+                Type t = c.GetType().GetProperty(kvp.Key).PropertyType;
+                bool isPrimitiveType = t.IsPrimitive || t.IsValueType || (t == typeof(string));
+
+                if (!isPrimitiveType)
+                {
+                    var id = Guid.Parse(kvp.Value);
+                    dynamic d = _tableDictionary[prop.Type].Find(p => p.Id.Equals(id));
+                    c.GetType().GetProperty(kvp.Key)
+                        .SetValue(c, Convert.ChangeType(d, c.GetType().GetProperty(kvp.Key).PropertyType),
+                            null);
+                    Console.Out.WriteLine("kvp = {0}", id);
+                }
+                else
+                {
+                    c.GetType().GetProperty(kvp.Key)
+                        .SetValue(c, Convert.ChangeType(kvp.Value, c.GetType().GetProperty(kvp.Key).PropertyType),
+                            null);
+                    Console.Out.WriteLine("kvp = {0}", kvp.Value);
+                }
+            }
+
+            Console.Out.WriteLine("c = {0}", c.Id);
+            _storageDbContext.SaveChanges();
+        }
 
         public void removeElement(string type, string id)
         {
