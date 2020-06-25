@@ -42,5 +42,19 @@ namespace ObjectStorageWeb.Controllers
                 Content = JsonSerializer.Serialize(dvm), ContentType = "application/json"
             };
         }
+
+        [HttpPost("/api/{className}")]
+        public IActionResult Add(string className, [FromBody] Dictionary<string, string> data)
+        {
+            _storage.addElement(className, data);
+            return new NoContentResult();
+        }
+
+        [HttpDelete("/api/{className}/{id}")]
+        public IActionResult Delete(string className, string id)
+        {
+            _storage.removeElement(className, id);
+            return new NoContentResult();
+        }
     }
 }
