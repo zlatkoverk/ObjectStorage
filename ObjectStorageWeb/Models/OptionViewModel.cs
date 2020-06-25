@@ -1,7 +1,10 @@
+using System.Text.Json.Serialization;
+
 namespace ObjectStorageWeb.Models
 {
     public class OptionViewModel
     {
+        [JsonIgnore]
         public dynamic Object { get; set; }
 
         public string Id
