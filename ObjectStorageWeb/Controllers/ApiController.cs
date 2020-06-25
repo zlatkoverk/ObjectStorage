@@ -18,28 +18,48 @@ namespace ObjectStorageWeb.Controllers
             _storage = storage;
         }
 
-        [HttpGet("/api/{className}/overview")]
-        public IActionResult Index(string className)
+        [HttpGet("/api/{className}")]
+        public IActionResult Meta(string className)
         {
             return new ContentResult()
             {
-                Content = JsonSerializer.Serialize(OverviewViewModel.create(_storage, className)),
+                Content = JsonSerializer.Serialize(OverviewViewModel.create(_storage, className).Class),
+                ContentType = "application/json"
+            };
+        }
+
+        [HttpGet("/api/{className}/all")]
+        public IActionResult All(string className)
+        {
+            return new ContentResult()
+            {
+                Content = JsonSerializer.Serialize(OverviewViewModel.create(_storage, className).Elements),
+                ContentType = "application/json"
+            };
+        }
+
+        [HttpGet("/api/{className}/options")]
+        public IActionResult Options(string className)
+        {
+            return new ContentResult()
+            {
+                Content = JsonSerializer.Serialize(OverviewViewModel.create(_storage, className).Options),
                 ContentType = "application/json"
             };
         }
 
         [HttpGet("/api/{className}/{entityId}")]
-        public IActionResult Index(string className, string entityId)
+        public IActionResult Details(string className, string entityId)
         {
             var dvm = DetailsViewModel.create(_storage, className, entityId);
-            if (dvm == null)
+            if (dvm == null || dvm.Element == null)
             {
                 return new NotFoundResult();
             }
 
             return new ContentResult()
             {
-                Content = JsonSerializer.Serialize(dvm), ContentType = "application/json"
+                Content = JsonSerializer.Serialize(dvm.Element), ContentType = "application/json"
             };
         }
 
