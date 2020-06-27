@@ -11,14 +11,23 @@ namespace ObjectStorageWeb.Models
         public List<Dictionary<string, object>> Elements { get; set; }
         public Dictionary<string, List<OptionViewModel>> Options { get; set; }
 
-        public static OverviewViewModel create(Storage storage, string className, bool displayPropertyName = false)
+        public static OverviewViewModel create(Storage storage, string className, bool apiResponse = false)
         {
             var v = new OverviewViewModel();
             v.Class = storage.getClasses().Find(c => c.Name.ToLower().Equals(className.ToLower()));
             v.Elements = storage.getEntities(v.Class).Select(e =>
                 {
-                    var dict = v.Class.Properties.ToDictionary(p => displayPropertyName ? p.DisplayName : p.Name,
-                        v => e.GetType().GetProperty(v.Name).GetValue(e));
+                    var dict = v.Class.Properties.ToDictionary(p => apiResponse ? p.DisplayName : p.Name,
+                        v =>
+                        {
+                            dynamic val = e.GetType().GetProperty(v.Name).GetValue(e);
+                            if (apiResponse && !(val is string || val is int || val is float))
+                            {
+                                return val.Id;
+                            }
+
+                            return val;
+                        });
                     dict.Add("Id", e.GetType().GetProperty("Id").GetValue(e));
                     return dict;
                 })
@@ -29,7 +38,7 @@ namespace ObjectStorageWeb.Models
                 var c = storage.getClasses().Find(c => c.Name.ToLower().Equals(property.Type.ToLower()));
                 if (c != null)
                 {
-                    v.Options[displayPropertyName ? property.DisplayName : property.Name] =
+                    v.Options[apiResponse ? property.DisplayName : property.Name] =
                         storage.getEntities(c).Select(e => new OptionViewModel() {Object = e}).ToList();
                 }
             }

@@ -15,7 +15,7 @@ namespace ObjectStorageWeb.Models
         // public bool Editable { get; set; } = true;
 
         public static DetailsViewModel create(Storage storage, string className, string entityId,
-            bool displayPropertyName = false)
+            bool apiResponse = false)
         {
             var o = storage.getClasses().Find(c => c.Name.ToLower().Equals(className.ToLower()));
 
@@ -31,8 +31,17 @@ namespace ObjectStorageWeb.Models
             v.Element = storage.getEntities(v.Class)
                 .FindAll(e => e.GetType().GetProperty("Id").GetValue(e).Equals(id)).Select(e =>
                 {
-                    var dict = v.Class.Properties.ToDictionary(p => displayPropertyName ? p.DisplayName : p.Name,
-                        v => e.GetType().GetProperty(v.Name).GetValue(e));
+                    var dict = v.Class.Properties.ToDictionary(p => apiResponse ? p.DisplayName : p.Name,
+                        v =>
+                        {
+                            dynamic val = e.GetType().GetProperty(v.Name).GetValue(e);
+                            if (apiResponse && !(val is string || val is int || val is float))
+                            {
+                                return val.Id;
+                            }
+
+                            return val;
+                        });
                     dict.Add("Id", e.GetType().GetProperty("Id").GetValue(e));
                     return dict;
                 }).First();
@@ -42,7 +51,7 @@ namespace ObjectStorageWeb.Models
                 var c = storage.getClasses().Find(c => c.Name.ToLower().Equals(property.Type.ToLower()));
                 if (c != null)
                 {
-                    v.Options[displayPropertyName ? property.DisplayName : property.Name] =
+                    v.Options[apiResponse ? property.DisplayName : property.Name] =
                         storage.getEntities(c).Select(e => new OptionViewModel() {Object = e}).ToList();
                 }
             }
