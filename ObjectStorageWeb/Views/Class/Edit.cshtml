@@ -26,7 +26,7 @@ Presentation property:
             {
                 <option value="@property.Id" selected="selected">@property.DisplayName</option>
             }
-            else
+            else if (property.Type == "string" || property.Type == "int" || property.Type == "float")
             {
                 <option value="@property.Id">@property.DisplayName</option>
             }

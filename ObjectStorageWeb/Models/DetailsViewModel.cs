@@ -10,13 +10,15 @@ namespace ObjectStorageWeb.Models
     {
         public Class Class { get; set; }
         public Dictionary<string, object> Element { get; set; }
+
         public Dictionary<string, List<OptionViewModel>> Options { get; set; }
         // public bool Editable { get; set; } = true;
 
-        public static DetailsViewModel create(Storage storage, string className, string entityId)
+        public static DetailsViewModel create(Storage storage, string className, string entityId,
+            bool displayPropertyName = false)
         {
             var o = storage.getClasses().Find(c => c.Name.ToLower().Equals(className.ToLower()));
- 
+
             Guid id;
             if (!Guid.TryParse(entityId, out id))
             {
@@ -29,7 +31,7 @@ namespace ObjectStorageWeb.Models
             v.Element = storage.getEntities(v.Class)
                 .FindAll(e => e.GetType().GetProperty("Id").GetValue(e).Equals(id)).Select(e =>
                 {
-                    var dict = v.Class.Properties.ToDictionary(p => p.Name,
+                    var dict = v.Class.Properties.ToDictionary(p => displayPropertyName ? p.DisplayName : p.Name,
                         v => e.GetType().GetProperty(v.Name).GetValue(e));
                     dict.Add("Id", e.GetType().GetProperty("Id").GetValue(e));
                     return dict;
@@ -40,7 +42,7 @@ namespace ObjectStorageWeb.Models
                 var c = storage.getClasses().Find(c => c.Name.ToLower().Equals(property.Type.ToLower()));
                 if (c != null)
                 {
-                    v.Options[property.Name] =
+                    v.Options[displayPropertyName ? property.DisplayName : property.Name] =
                         storage.getEntities(c).Select(e => new OptionViewModel() {Object = e}).ToList();
                 }
             }

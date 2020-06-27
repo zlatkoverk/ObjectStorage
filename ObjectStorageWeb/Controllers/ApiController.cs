@@ -33,7 +33,7 @@ namespace ObjectStorageWeb.Controllers
         {
             return new ContentResult()
             {
-                Content = JsonSerializer.Serialize(OverviewViewModel.create(_storage, className).Elements),
+                Content = JsonSerializer.Serialize(OverviewViewModel.create(_storage, className, true).Elements),
                 ContentType = "application/json"
             };
         }
@@ -43,7 +43,7 @@ namespace ObjectStorageWeb.Controllers
         {
             return new ContentResult()
             {
-                Content = JsonSerializer.Serialize(OverviewViewModel.create(_storage, className).Options),
+                Content = JsonSerializer.Serialize(OverviewViewModel.create(_storage, className, true).Options),
                 ContentType = "application/json"
             };
         }
@@ -51,7 +51,7 @@ namespace ObjectStorageWeb.Controllers
         [HttpGet("/api/{className}/{entityId}")]
         public IActionResult Details(string className, string entityId)
         {
-            var dvm = DetailsViewModel.create(_storage, className, entityId);
+            var dvm = DetailsViewModel.create(_storage, className, entityId, true);
             if (dvm == null || dvm.Element == null)
             {
                 return new NotFoundResult();
