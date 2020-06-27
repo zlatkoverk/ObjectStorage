@@ -2,7 +2,7 @@
         <thead>
         {% for property in Model.Class.Properties -%}
         
-            <th>{{ property.Name }}</th>
+            <th>{{ property.display_name }}</th>
       
         {% endfor -%}
         </thead>
@@ -36,7 +36,7 @@
                                     {% endfor -%}   
                                 </select>
                             {% else -%}
-                                <input type="text" name="{{property.Name}}" placeholder="{{property.Type}} value for {{property.Name}}"/>
+                                <input type="text" name="{{property.Name}}" placeholder="{{property.Type}} value for {{property.display_name}}"/>
                             {% endif -%}
                         </td>
         {% endfor -%}

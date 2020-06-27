@@ -32,7 +32,7 @@ namespace ObjectStorageWeb.Controllers
             var c = _storage.getClasses().Find(c => c.Name.ToLower().Equals(className.ToLower()));
             if (c == null)
             {
-                c = new Class() {Name = className};
+                c = new Class() {DisplayName = className};
             }
 
             return View(c);

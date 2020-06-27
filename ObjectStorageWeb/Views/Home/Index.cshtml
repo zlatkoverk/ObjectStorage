@@ -12,7 +12,7 @@
         @foreach (var entity in Model.Classes)
         {
             <li>
-                @entity.Name
+                @entity.DisplayName
                 @if (SignInManager.IsSignedIn(User))
                 {
                     <a href="/class/@entity.Name">Edit</a>
@@ -24,7 +24,7 @@
         {
             <li>
                 <form method="post" action="/class/">
-                    <input name="Name" placeholder="New Class Name"/>
+                    <input name="DisplayName" placeholder="New Class Name"/>
                     <input type="submit"/>
                 </form>
             </li>

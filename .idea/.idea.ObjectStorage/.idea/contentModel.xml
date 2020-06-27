@@ -33,9 +33,12 @@
         </e>
         <e p="ObjectStorage.csproj" t="IncludeRecursive" />
         <e p="Storage.cs" t="Include" />
+        <e p="StorageState.cs" t="Include" />
         <e p="Template" t="Include">
           <e p="ClassTemplate.liquid" t="Include" />
           <e p="DbContextTemplate.liquid" t="Include" />
+          <e p="Details.liquid" t="Include" />
+          <e p="Overview.liquid" t="Include" />
         </e>
       </e>
       <e p="ObjectStorage.sln" t="IncludeFlat" />
@@ -65,7 +68,6 @@
       </e>
       <e p="ObjectStorageWeb" t="IncludeRecursive">
         <e p="a.db" t="Include" />
-        <e p="a1.db" t="Include" />
         <e p="app.db" t="Include" />
         <e p="appsettings.Development.json" t="Include" />
         <e p="appsettings.json" t="Include" />
@@ -78,9 +80,12 @@
         </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="Controllers" t="Include">
+          <e p="ApiController.cs" t="Include" />
           <e p="ClassController.cs" t="Include" />
           <e p="HomeController.cs" t="Include" />
           <e p="PropertyController.cs" t="Include" />
+          <e p="ShutdownController.cs" t="Include" />
+          <e p="TemplateController.cs" t="Include" />
         </e>
         <e p="Data" t="Include">
           <e p="ApplicationDbContext.cs" t="Include" />
@@ -91,16 +96,25 @@
           </e>
         </e>
         <e p="Migrations" t="Include">
-          <e p="20200606134122_init.cs" t="Include" />
-          <e p="20200606134122_init.Designer.cs" t="Include" />
+          <e p="20200627071105_initial.cs" t="Include" />
+          <e p="20200627071105_initial.Designer.cs" t="Include" />
           <e p="ModelDbContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="model.db" t="Include" />
+        <e p="model.db-shm" t="Include" />
+        <e p="model.db-wal" t="Include" />
         <e p="Models" t="Include">
+          <e p="DetailsViewModel.cs" t="Include" />
           <e p="ErrorViewModel.cs" t="Include" />
           <e p="IndexViewModel.cs" t="Include" />
+          <e p="OptionViewModel.cs" t="Include" />
           <e p="OverviewViewModel.cs" t="Include" />
         </e>
+        <e p="mylibGeneratedClass._ehrae_aer.dll" t="Include" />
+        <e p="mylibGeneratedClass._er.dll" t="Include" />
+        <e p="mylibGeneratedClass._inner_class.dll" t="Include" />
+        <e p="mylibGeneratedClass._new_class.dll" t="Include" />
+        <e p="mylibGeneratedClass.GeneratedDbContext.dll" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">
@@ -124,7 +138,6 @@
           </e>
           <e p="Home" t="Include">
             <e p="Index.cshtml" t="Include" />
-            <e p="Privacy.cshtml" t="Include" />
           </e>
           <e p="Property" t="Include">
             <e p="Index.cshtml" t="Include" />
@@ -134,6 +147,9 @@
             <e p="_LoginPartial.cshtml" t="Include" />
             <e p="_ValidationScriptsPartial.cshtml" t="Include" />
             <e p="Error.cshtml" t="Include" />
+          </e>
+          <e p="Shutdown" t="Include">
+            <e p="Index.cshtml" t="Include" />
           </e>
         </e>
         <e p="wwwroot" t="Include">

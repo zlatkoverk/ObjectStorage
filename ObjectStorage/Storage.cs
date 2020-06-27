@@ -172,8 +172,8 @@ namespace ObjectStorage
 
         public void load()
         {
-            Template.RegisterSafeType(typeof(Class), new[] {"Name", "Properties", "OverviewTemplate"});
-            Template.RegisterSafeType(typeof(Property), new[] {"Name", "Type"});
+            Template.RegisterSafeType(typeof(Class), new[] {"Name", "DisplayName", "Properties", "OverviewTemplate"});
+            Template.RegisterSafeType(typeof(Property), new[] {"Name", "DisplayName", "Type"});
 
             string baseDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string templatePath = Path.Combine(baseDir, "Template/ClassTemplate.liquid");

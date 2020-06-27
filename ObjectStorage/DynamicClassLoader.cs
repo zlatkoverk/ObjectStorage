@@ -95,6 +95,7 @@ namespace ObjectStorage
                                $"Location: {codeIssue.Location.GetLineSpan()}," +
                                $" Severity: {codeIssue.Severity}";
                 Console.WriteLine(issue);
+                Console.WriteLine(code);
             }
 
             return null;

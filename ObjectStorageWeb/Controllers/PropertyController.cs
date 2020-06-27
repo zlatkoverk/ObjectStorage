@@ -27,8 +27,16 @@ namespace ObjectStorageWeb.Controllers
         [HttpGet("/property/{className}")]
         public IActionResult Index(string className)
         {
-            var types = new List<string> {"string", "int", "float"};
-            types.AddRange(_storage.getClasses().Select(c => c.Name));
+            var types = new List<Dictionary<string, string>>();
+            types.AddRange(_storage.getClasses().Select(c =>
+                {
+                    var d = new Dictionary<string, string>();
+                    d["type"] = c.Name;
+                    d["name"] = c.DisplayName;
+
+                    return d;
+                }
+            ));
             return View(types);
         }
 

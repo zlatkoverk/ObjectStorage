@@ -1,14 +1,18 @@
-﻿@model List<String>
+﻿@model List<Dictionary<string, string>>
 @{
     ViewData["Title"] = "Edit";
 }
 <h3>New property</h3>
 <form method="post">
-    <input name="Name" placeholder="Insert Property Name" required="required"/>
+    <input name="DisplayName" placeholder="Insert Property Name" required="required"/>
     <select name="Type" required="required">
+
+        <option value="string">text</option>
+        <option value="int">integer</option>
+        <option value="float">decimal number</option>
         @foreach (var type in Model)
         {
-            <option value="@type">@type</option>
+            <option value="@type["type"]">@type["name"]</option>
         }
     </select>
     <input type="submit"/>

@@ -4,14 +4,14 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>@Model.Name - Class Details</h2>
+<h2>@Model.DisplayName - Class Details</h2>
 <h3>Properties</h3>
 <ul>
     @foreach (var property in Model.Properties)
     {
         <li>
             @property.Type
-            @property.Name
+            @property.DisplayName
             <a href="/property/@property.Id/delete">Delete</a>
         </li>
     }
@@ -24,11 +24,11 @@ Presentation property:
         {
             @if (Model.PresentationProperty != null && Model.PresentationProperty.Id.Equals(property.Id))
             {
-                <option value="@property.Id" selected="selected">@property.Name</option>
+                <option value="@property.Id" selected="selected">@property.DisplayName</option>
             }
             else
             {
-                <option value="@property.Id">@property.Name</option>
+                <option value="@property.Id">@property.DisplayName</option>
             }
         }
     </select>

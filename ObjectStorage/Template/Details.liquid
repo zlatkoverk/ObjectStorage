@@ -1,6 +1,6 @@
 <form method="post" action="/class/{{Model.Class.Name}}/{{Model.Element["Id"]}}?redirectTo=/entity/{{Model.Class.Name}}/overview">
     {% for property in Model.Class.Properties -%}
-    <label>{{property.Name}}</label>
+    <label>{{property.display_name}}</label>
         {% if Model.Options[property.Name] -%}
             <select name="{{property.Name}}">
                 {% for option in Model.Options[property.Name] -%}
