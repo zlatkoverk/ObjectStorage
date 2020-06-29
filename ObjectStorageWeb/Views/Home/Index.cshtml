@@ -4,30 +4,57 @@
 }
 @inject SignInManager<IdentityUser> SignInManager
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <h2>Entities</h2>
+<div>
+    <h2>My Entities</h2>
 
-    <ul>
+    <div class="card-group">
         @foreach (var entity in Model.Classes)
         {
-            <li>
-                @entity.DisplayName
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    <a href="/class/@entity.Name">Edit</a>
-                }
-                <a href="/entity/@entity.Name/overview">View</a>
-            </li>
+            <div class="card" style="width: 18rem;">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">@entity.DisplayName</li>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <li class="list-group-item">
+                            <a href="/class/@entity.Name">
+                                Edit Model <i class="fas fa-edit"></i>
+                            </a>
+                        </li>
+                    }
+                    <li class="list-group-item">
+                        <a href="/entity/@entity.Name/overview">Edit Data <i class="fas fa-list"></i></a>
+                    </li>
+                </ul>
+            </div>
         }
+    </div>
         @if (SignInManager.IsSignedIn(User))
         {
-            <li>
-                <form method="post" action="/class/">
-                    <input name="DisplayName" placeholder="New Class Name"/>
-                    <input type="submit"/>
-                </form>
-            </li>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newClassModal">New entity type</button>
+
+            <div class="modal fade" id="newClassModal" tabindex="-1" role="dialog" aria-labelledby="newClassModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="newClassModalLabel">New entity type</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form method="post" action="/class/">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Type Name:</label>
+                                    <input type="text" class="form-control" id="recipient-name" name="DisplayName">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         }
-    </ul>
 </div>

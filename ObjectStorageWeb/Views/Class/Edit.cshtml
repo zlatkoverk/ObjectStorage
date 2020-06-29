@@ -4,45 +4,77 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>@Model.DisplayName - Class Details</h2>
-<h3>Properties</h3>
-<ul>
-    @foreach (var property in Model.Properties)
-    {
-        <li>
-            @property.Type
-            @property.DisplayName
-            <a href="/property/@property.Id/delete">Delete</a>
-        </li>
-    }
-</ul>
-Presentation property:
-<form method="post" action="/class/@Model.Name/presentationProperty">
-    <select name="PresentationProperty">
-        <option></option>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Model.DisplayName</h5>
+        <p class="card-text">
+            Presentation property:
+            <form method="post" action="/class/@Model.Name/presentationProperty">
+                <select name="PresentationProperty">
+                    <option></option>
+                    @foreach (var property in Model.Properties)
+                    {
+                        @if (Model.PresentationProperty != null && Model.PresentationProperty.Id.Equals(property.Id))
+                        {
+                            <option value="@property.Id" selected="selected">@property.DisplayName</option>
+                        }
+                        else if (property.Type == "string" || property.Type == "int" || property.Type == "float")
+                        {
+                            <option value="@property.Id">@property.DisplayName</option>
+                        }
+                    }
+                </select>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </p>
+    </div>
+    <ul class="list-group list-group-flush">
         @foreach (var property in Model.Properties)
         {
-            @if (Model.PresentationProperty != null && Model.PresentationProperty.Id.Equals(property.Id))
-            {
-                <option value="@property.Id" selected="selected">@property.DisplayName</option>
-            }
-            else if (property.Type == "string" || property.Type == "int" || property.Type == "float")
-            {
-                <option value="@property.Id">@property.DisplayName</option>
-            }
+            <li class="list-group-item">
+                @property.Type
+                @property.DisplayName
+                @if (property.Constraint != null)
+                {
+                    <span> from interval [@property.Constraint.MinValue, @property.Constraint.MaxValue]</span>
+                }
+                <a href="/property/@property.Id/delete">
+                    <i class="fas fa-trash-alt"></i>
+                </a>
+            </li>
         }
-    </select>
-    <input type="submit"/>
-</form>
+    </ul>
+    <div class="card-body">
+        <a href="/property/@Model.Name" class="card-link">Add new property</a>
+        <a href="/entity/@Model.Name/overview" class="card-link">View and edit data</a>
+    </div>
+</div>
 <br/>
-<a href="/property/@Model.Name">New property</a>
-<a href="/entity/@Model.Name/overview">View</a>
 <br/>
 
 <h3>Edit templates</h3>
+<p>
+    Here you can edit HTML code which will be served on pages defined for this entity
+</p>
 <form method="post" action="/class/">
-    <label>Overview template</label><textarea name="OverviewTemplate">@Model.OverviewTemplate</textarea>
-    <label>Details template</label><textarea name="DetailsTemplate">@Model.DetailsTemplate</textarea>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseOverview" aria-expanded="false" aria-controls="collapseOverview">
+        Edit overview template
+    </button>
+    <div class="form-group collapse" id="collapseOverview">
+        <div class="card card-body">
+            <label>Overview template</label>
+            <textarea rows="25" class="form-control" name="OverviewTemplate">@Model.OverviewTemplate</textarea>
+        </div>
+    </div>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseDetails" aria-expanded="false" aria-controls="collapseDetails">
+        Edit details template
+    </button>
+    <div class="form-group collapse" id="collapseDetails">
+        <div class="card card-body">
+            <label>Details template</label>
+            <textarea rows="25" class="form-control" name="DetailsTemplate">@Model.DetailsTemplate</textarea>
+        </div>
+    </div>
     <input type="hidden" name="Name" value="@Model.Name">
-    <input type="submit"/>
+    <button type="submit" class="btn btn-primary">Save</button>
 </form>
