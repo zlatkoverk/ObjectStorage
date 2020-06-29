@@ -22,6 +22,7 @@
         <e p="GeneratedClass" t="Include" />
         <e p="MetaModel" t="Include">
           <e p="Class.cs" t="Include" />
+          <e p="Constraint.cs" t="Include" />
           <e p="Property.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
@@ -96,11 +97,13 @@
           </e>
         </e>
         <e p="Migrations" t="Include">
-          <e p="20200627071105_initial.cs" t="Include" />
-          <e p="20200627071105_initial.Designer.cs" t="Include" />
+          <e p="20200629182201_initial.cs" t="Include" />
+          <e p="20200629182201_initial.Designer.cs" t="Include" />
           <e p="ModelDbContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="model.db" t="Include" />
+        <e p="model.db-shm" t="Include" />
+        <e p="model.db-wal" t="Include" />
         <e p="Models" t="Include">
           <e p="DetailsViewModel.cs" t="Include" />
           <e p="ErrorViewModel.cs" t="Include" />
@@ -108,10 +111,8 @@
           <e p="OptionViewModel.cs" t="Include" />
           <e p="OverviewViewModel.cs" t="Include" />
         </e>
-        <e p="mylibGeneratedClass._ehrae_aer.dll" t="Include" />
-        <e p="mylibGeneratedClass._er.dll" t="Include" />
-        <e p="mylibGeneratedClass._inner_class.dll" t="Include" />
-        <e p="mylibGeneratedClass._new_class.dll" t="Include" />
+        <e p="mylibGeneratedClass._enti.dll" t="Include" />
+        <e p="mylibGeneratedClass._test.dll" t="Include" />
         <e p="mylibGeneratedClass.GeneratedDbContext.dll" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">

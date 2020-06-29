@@ -66,7 +66,10 @@ namespace ObjectStorageWeb.Controllers
         [HttpPost("/api/{className}")]
         public IActionResult Add(string className, [FromBody] Dictionary<string, string> data)
         {
-            _storage.addElement(className, data);
+            if (!_storage.addElement(className, data))
+            {
+                return new BadRequestResult();
+            }
             return new NoContentResult();
         }
 

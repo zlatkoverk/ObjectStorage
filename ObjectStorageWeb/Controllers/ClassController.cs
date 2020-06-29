@@ -119,7 +119,11 @@ namespace ObjectStorageWeb.Controllers
                 return RedirectPermanent("/shutdown");
             }
 
-            _storage.editElement(className, data, entityId);
+            if (!_storage.editElement(className, data, entityId))
+            {
+                return RedirectPermanent($"/entity/{className}/{entityId}");
+            }
+
             return RedirectPermanent(redirectTo == "" ? $"/entity/{className}/overview" : redirectTo);
         }
     }

@@ -51,6 +51,11 @@ namespace ObjectStorageWeb.Controllers
         [HttpPost("/property/{className}"), ValidateAntiForgeryToken]
         public IActionResult Save(string className, [FromForm] Property p)
         {
+            if (Math.Abs(p.Constraint.MinValue) < 1E-4 && Math.Abs(p.Constraint.MaxValue) < 1E-4)
+            {
+                p.Constraint = null;
+            }
+
             _storage.addProperty(className, p);
             _state.Valid = false;
             return RedirectPermanent($"/class/{className}");

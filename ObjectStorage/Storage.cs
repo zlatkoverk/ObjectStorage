@@ -74,7 +74,7 @@ namespace ObjectStorage
 
         public List<Class> getClasses()
         {
-            return _dbContext.Classes.Include(c => c.Properties).ToList();
+            return _dbContext.Classes.Include(c => c.Properties).ThenInclude(p => p.Constraint).ToList();
         }
 
         public List<object> getEntities(Class c)
@@ -88,7 +88,7 @@ namespace ObjectStorage
             _dbContext.SaveChanges();
         }
 
-        public void addElement(string type, Dictionary<string, string> data)
+        public bool addElement(string type, Dictionary<string, string> data)
         {
             dynamic c = DynamicClassLoader.createCachedInstance("GeneratedClass." + type);
             var cl = getClasses().Find(e => e.Name == type);
@@ -110,9 +110,25 @@ namespace ObjectStorage
                 }
                 else
                 {
+                    dynamic val;
+                    try
+                    {
+                        val = Convert.ChangeType(kvp.Value, c.GetType().GetProperty(kvp.Key).PropertyType);
+                    }
+                    catch (Exception ex)
+                    {
+                        return false;
+                    }
+
                     c.GetType().GetProperty(kvp.Key)
-                        .SetValue(c, Convert.ChangeType(kvp.Value, c.GetType().GetProperty(kvp.Key).PropertyType),
+                        .SetValue(c, val,
                             null);
+                    var constraint = cl.Properties.Single(p => p.Name == kvp.Key).Constraint;
+                    if (constraint != null && (val < constraint.MinValue || val > constraint.MaxValue))
+                    {
+                        return false;
+                    }
+
                     Console.Out.WriteLine("kvp = {0}", kvp.Value);
                 }
             }
@@ -121,8 +137,10 @@ namespace ObjectStorage
             dynamic dbset = _storageDbContext.GetType().GetProperty(type).GetValue(_storageDbContext, null);
             dbset.GetType().GetMethod("Add").Invoke(dbset, new[] {c});
             _storageDbContext.SaveChanges();
+            return true;
         }
-        public void editElement(string type, Dictionary<string, string> data, string entityId)
+
+        public bool editElement(string type, Dictionary<string, string> data, string entityId)
         {
             dynamic c = _tableDictionary[type].Find(e => e.Id.ToString().Equals(entityId));
             var cl = getClasses().Find(e => e.Name == type);
@@ -144,15 +162,31 @@ namespace ObjectStorage
                 }
                 else
                 {
+                    dynamic val;
+                    try
+                    {
+                        val = Convert.ChangeType(kvp.Value, c.GetType().GetProperty(kvp.Key).PropertyType);
+                    }
+                    catch (Exception ex)
+                    {
+                        return false;
+                    }
+
                     c.GetType().GetProperty(kvp.Key)
-                        .SetValue(c, Convert.ChangeType(kvp.Value, c.GetType().GetProperty(kvp.Key).PropertyType),
+                        .SetValue(c, val,
                             null);
+                    var constraint = cl.Properties.Single(p => p.Name == kvp.Key).Constraint;
+                    if (constraint != null && (val < constraint.MinValue || val > constraint.MaxValue))
+                    {
+                        return false;
+                    }
                     Console.Out.WriteLine("kvp = {0}", kvp.Value);
                 }
             }
 
             Console.Out.WriteLine("c = {0}", c.Id);
             _storageDbContext.SaveChanges();
+            return true;
         }
 
         public void removeElement(string type, string id)
@@ -164,7 +198,7 @@ namespace ObjectStorage
             }
 
             var element = _tableDictionary[type].Find(v => v.Id == guid);
-            
+
             dynamic dbset = _storageDbContext.GetType().GetProperty(type).GetValue(_storageDbContext, null);
             dbset.GetType().GetMethod("Remove").Invoke(dbset, new[] {element});
             _storageDbContext.SaveChanges();

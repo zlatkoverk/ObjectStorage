@@ -20,6 +20,7 @@ namespace ObjectStorage.MetaModel
 
         [Key] public Guid Id { get; set; }
         [Column] public string DisplayName { get; set; }
+        [Column] public Constraint Constraint { get; set; }
 
         [Column]
         public string Name
