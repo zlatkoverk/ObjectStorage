@@ -21,7 +21,7 @@ namespace ObjectStorageWeb.Models
                         v =>
                         {
                             dynamic val = e.GetType().GetProperty(v.Name).GetValue(e);
-                            if (apiResponse && !(val is string || val is int || val is float))
+                            if (apiResponse && !(val is string || val is int || val is float || val == null))
                             {
                                 return val.Id;
                             }
