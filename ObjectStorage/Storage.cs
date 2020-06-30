@@ -206,7 +206,7 @@ namespace ObjectStorage
 
         public void load()
         {
-            Template.RegisterSafeType(typeof(Class), new[] {"Name", "DisplayName", "Properties", "OverviewTemplate"});
+            Template.RegisterSafeType(typeof(Class), new[] {"Name", "DisplayName", "Properties", "OverviewTemplate", "PresentationProperty"});
             Template.RegisterSafeType(typeof(Property), new[] {"Name", "DisplayName", "Type"});
 
             string baseDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);

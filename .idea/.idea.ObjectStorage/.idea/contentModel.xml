@@ -39,6 +39,7 @@
           <e p="ClassTemplate.liquid" t="Include" />
           <e p="DbContextTemplate.liquid" t="Include" />
           <e p="Details.liquid" t="Include" />
+          <e p="Overview-Cards.liquid" t="Include" />
           <e p="Overview.liquid" t="Include" />
         </e>
       </e>
@@ -102,8 +103,6 @@
           <e p="ModelDbContextModelSnapshot.cs" t="Include" />
         </e>
         <e p="model.db" t="Include" />
-        <e p="model.db-shm" t="Include" />
-        <e p="model.db-wal" t="Include" />
         <e p="Models" t="Include">
           <e p="DetailsViewModel.cs" t="Include" />
           <e p="ErrorViewModel.cs" t="Include" />
