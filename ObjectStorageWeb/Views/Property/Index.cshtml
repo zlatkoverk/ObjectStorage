@@ -4,18 +4,35 @@
 }
 <h3>New property</h3>
 <form method="post">
-    <input name="DisplayName" placeholder="Insert Property Name" required="required"/>
-    <select name="Type" required="required">
+    <div class="form-group">
+        <label for="DisplayName" class="col-form-label">Property Name:</label>
+        <input type="text" class="form-control" id="DisplayName" name="DisplayName">
+    </div>
+    <div class="form-group">
+        <label for="Type" class="col-form-label">Property Type:</label>
+        <select name="Type" required="required" id="Type" class="form-control">
 
-        <option value="string">text</option>
-        <option value="int">integer</option>
-        <option value="float">decimal number</option>
-        @foreach (var type in Model)
-        {
-            <option value="@type["type"]">@type["name"]</option>
-        }
-    </select>
-    <input name="Constraint.MinValue" placeholder="Insert Min Value" type="number"/>
-    <input name="Constraint.MaxValue" placeholder="Insert Max Value" type="number"/>
-    <input type="submit"/>
+            <option value="string">text</option>
+            <option value="int">integer</option>
+            <option value="float">decimal number</option>
+            @foreach (var type in Model)
+            {
+                <option value="@type["type"]">@type["name"]</option>
+            }
+        </select>
+    </div>
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseRanges" aria-expanded="false" aria-controls="collapseRanges">
+            Define legal value range
+        </button>
+    <div class="form-group collapse" id="collapseRanges">
+        <div class="form-group">
+            <label for="Constraint.MinValue" class="col-form-label">Minimum Value:</label>
+            <input type="number" class="form-control" id="Constraint.MinValue" name="Constraint.MinValue">
+        </div>
+        <div class="form-group">
+            <label for="Constraint.MaxValue" class="col-form-label">Maximum Value:</label>
+            <input type="number" class="form-control" id="Constraint.MaxValue" name="Constraint.MaxValue">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
 </form>

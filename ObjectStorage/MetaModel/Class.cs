@@ -39,11 +39,11 @@ namespace ObjectStorage.MetaModel
         [JsonIgnore]
         public string OverviewTemplate { get; set; } = File.ReadAllText(Path.Combine(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-            "Template/Overview.liquid"));
+            "Template/Overview-Cards.liquid"));
 
         [JsonIgnore]
         public string DetailsTemplate { get; set; } = File.ReadAllText(Path.Combine(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-            "Template/Details.liquid"));
+            "Template/Details-Cards.liquid"));
     }
 }

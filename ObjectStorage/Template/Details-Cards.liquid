@@ -1,0 +1,36 @@
+<html>
+   <head>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+      <link rel="stylesheet" href="/css/site.css" />
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+   </head>
+   <body>
+   <h2>My data</h2>
+
+               <form method="post" action="/class/{{Model.Class.Name}}/{{Model.Element["Id"]}}?redirectTo=/entity/{{Model.Class.Name}}/overview">
+                  <div class="modal-body">
+                     {% for property in Model.Class.Properties -%}
+                     <div class="form-group">
+                        <label for="{{property.Name}}" class="col-form-label">{{property.display_name}}:</label>
+                        {% if Model.Options[property.Name] -%}
+                        <select name="{{property.Name}}">
+                           {% for option in Model.Options[property.Name] -%}
+                           <option value="{{option.Id}}">{{option.Value}}</option>
+                           {% endfor -%}   
+                        </select>
+                        {% else -%}
+                        <input type="text" class="form-control" id="{{property.Name}}" name="{{property.Name}}" value="{{ Model.Element[property.Name] }}">
+                        {% endif -%}
+                     </div>
+                     {% endfor -%}
+                  </div>
+                  <div class="modal-footer">
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                     <button type="submit" class="btn btn-primary">Save</button>
+                  </div>
+               </form>
+   </body>
+   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</html>

@@ -31,6 +31,9 @@
         <None Update="Template\Overview-Cards.liquid">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="Template\Details-Cards.liquid">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>

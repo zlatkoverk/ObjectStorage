@@ -32,6 +32,7 @@
         <e p="Template" t="Include">
           <e p="ClassTemplate.liquid" t="Include" />
           <e p="DbContextTemplate.liquid" t="Include" />
+          <e p="Details-Cards.liquid" t="Include" />
           <e p="Details.liquid" t="Include" />
           <e p="Overview-Cards.liquid" t="Include" />
           <e p="Overview.liquid" t="Include" />
@@ -83,6 +84,7 @@
         <e p="mylibGeneratedClass._enti.dll" t="Include" />
         <e p="mylibGeneratedClass._ergerg.dll" t="Include" />
         <e p="mylibGeneratedClass._mymy.dll" t="Include" />
+        <e p="mylibGeneratedClass._processor.dll" t="Include" />
         <e p="mylibGeneratedClass._rers.dll" t="Include" />
         <e p="mylibGeneratedClass._rgsrgdrg.dll" t="Include" />
         <e p="mylibGeneratedClass._sgrsgrsg.dll" t="Include" />
