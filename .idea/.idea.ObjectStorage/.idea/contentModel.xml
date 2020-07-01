@@ -82,15 +82,6 @@
           <e p="OverviewViewModel.cs" t="Include" />
         </e>
         <e p="mylibGeneratedClass._enti.dll" t="Include" />
-        <e p="mylibGeneratedClass._ergerg.dll" t="Include" />
-        <e p="mylibGeneratedClass._mymy.dll" t="Include" />
-        <e p="mylibGeneratedClass._processor.dll" t="Include" />
-        <e p="mylibGeneratedClass._rers.dll" t="Include" />
-        <e p="mylibGeneratedClass._rgsrgdrg.dll" t="Include" />
-        <e p="mylibGeneratedClass._sgrsgrsg.dll" t="Include" />
-        <e p="mylibGeneratedClass._test.dll" t="Include" />
-        <e p="mylibGeneratedClass._werwetwrg.dll" t="Include" />
-        <e p="mylibGeneratedClass.GeneratedDbContext.dll" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">
