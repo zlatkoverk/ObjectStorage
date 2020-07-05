@@ -26,7 +26,20 @@ namespace ObjectStorageWeb.Controllers
         {
             _storage.dump();
             _applicationLifetime.StopApplication();
-            return new EmptyResult();
+            return new ContentResult()
+            {
+                Content = @"
+<html>
+<head>
+<meta http-equiv=""refresh"" content=""7;url=/"" />
+</head>
+<body>
+Please wait a moment
+</body>
+</html>
+",
+                ContentType = "text/html"
+            };
         }
     }
 }

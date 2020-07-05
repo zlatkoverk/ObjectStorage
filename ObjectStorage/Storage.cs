@@ -262,6 +262,8 @@ namespace ObjectStorage
 
                 _storageDbContext.DetachAllEntries();
                 _storageDbContext.Database.EnsureDeleted();
+                _storageDbContext = DynamicClassLoader.createDynamicInstance(dbContextClassString,
+                    "GeneratedClass.GeneratedDbContext");
                 _storageDbContext.Database.EnsureCreated();
                 loadFromBackup();
             }
