@@ -260,6 +260,7 @@ namespace ObjectStorage
             {
                 Console.WriteLine("Model has changed - recreating DB" + e.Message);
 
+                _storageDbContext.DetachAllEntries();
                 _storageDbContext.Database.EnsureDeleted();
                 _storageDbContext.Database.EnsureCreated();
                 loadFromBackup();

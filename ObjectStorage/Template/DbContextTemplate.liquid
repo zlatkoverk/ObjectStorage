@@ -28,5 +28,13 @@ namespace GeneratedClass
                         {{ data | map: "Name" | join: ", " }}
                         };
             }
+            
+        public void DetachAllEntries()
+        {
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                 Entry(entry.Entity).State = EntityState.Detached;
+            }
+        }
     }
 }
