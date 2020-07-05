@@ -97,10 +97,15 @@ namespace ObjectStorageWeb.Controllers
             return View(v);
         }
 
+        [AllowAnonymous]
         [HttpPost("/class/{className}")]
         public IActionResult Add(string className, [FromForm] Dictionary<string, string> data,
-            [FromQuery(Name = "redirectTo")] string redirectTo = "")
+            [FromQuery(Name = "redirectTo")] string redirectTo = "", [FromQuery(Name = "publicAdd")] bool publicAdd = false)
         {
+            if (!User.Identity.IsAuthenticated && !publicAdd)
+            {
+                return Unauthorized();
+            }
             if (!_state.Valid)
             {
                 return RedirectPermanent("/shutdown");
