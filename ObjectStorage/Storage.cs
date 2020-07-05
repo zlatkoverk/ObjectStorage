@@ -8,15 +8,18 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
+using System.Text.Json;
 using DotLiquid;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Migrations;
 using ObjectStorage.DbContext;
 using ObjectStorage.MetaModel;
 using Property = ObjectStorage.MetaModel.Property;
+using Microsoft.EntityFrameworkCore;
 
 namespace ObjectStorage
 {
@@ -95,6 +98,12 @@ namespace ObjectStorage
 
             foreach (var kvp in data)
             {
+                if (kvp.Key == "Id")
+                {
+                    c.Id = Guid.Parse(kvp.Value);
+                    continue;
+                }
+
                 var prop = cl.Properties.First(e => e.Name == kvp.Key);
                 Type t = c.GetType().GetProperty(kvp.Key).PropertyType;
                 bool isPrimitiveType = t.IsPrimitive || t.IsValueType || (t == typeof(string));
@@ -103,6 +112,12 @@ namespace ObjectStorage
                 {
                     var id = Guid.Parse(kvp.Value);
                     dynamic d = _tableDictionary[prop.Type].Find(p => p.Id.Equals(id));
+                    if (d == null)
+                    {
+                        Console.Out.WriteLine(" missing id = {0} of type {1}", id, prop.Type);
+                        return false;
+                    }
+
                     c.GetType().GetProperty(kvp.Key)
                         .SetValue(c, Convert.ChangeType(d, c.GetType().GetProperty(kvp.Key).PropertyType),
                             null);
@@ -137,6 +152,7 @@ namespace ObjectStorage
             dynamic dbset = _storageDbContext.GetType().GetProperty(type).GetValue(_storageDbContext, null);
             dbset.GetType().GetMethod("Add").Invoke(dbset, new[] {c});
             _storageDbContext.SaveChanges();
+            _tableDictionary[type].Add(c);
             return true;
         }
 
@@ -180,6 +196,7 @@ namespace ObjectStorage
                     {
                         return false;
                     }
+
                     Console.Out.WriteLine("kvp = {0}", kvp.Value);
                 }
             }
@@ -206,7 +223,8 @@ namespace ObjectStorage
 
         public void load()
         {
-            Template.RegisterSafeType(typeof(Class), new[] {"Name", "DisplayName", "Properties", "OverviewTemplate", "PresentationProperty"});
+            Template.RegisterSafeType(typeof(Class),
+                new[] {"Name", "DisplayName", "Properties", "OverviewTemplate", "PresentationProperty"});
             Template.RegisterSafeType(typeof(Property), new[] {"Name", "DisplayName", "Type"});
 
             string baseDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -240,9 +258,11 @@ namespace ObjectStorage
             }
             catch (Exception e)
             {
-                Console.WriteLine("Model has changed - recreating DB");
+                Console.WriteLine("Model has changed - recreating DB" + e.Message);
+
                 _storageDbContext.Database.EnsureDeleted();
                 _storageDbContext.Database.EnsureCreated();
+                loadFromBackup();
             }
         }
 
@@ -270,6 +290,73 @@ namespace ObjectStorage
             }
 
             loadAssemblies(skipped, template);
+        }
+
+        public void dump()
+        {
+            foreach (var table in _tableDictionary)
+            {
+                var s = JsonSerializer.Serialize(table.Value);
+                File.WriteAllText(table.Key + ".backup", s);
+            }
+        }
+
+        public void loadFromBackup(List<string> types = null)
+        {
+            if (types == null)
+            {
+                types = _tableDictionary.Keys.ToList();
+            }
+
+            List<string> unresolved = new List<string>();
+            foreach (var table in types)
+            {
+                if (!File.Exists(table + ".backup"))
+                {
+                    continue;
+                }
+
+                var s = JsonSerializer.Deserialize<List<Dictionary<string, JsonElement>>>(
+                    File.ReadAllText(table + ".backup"));
+
+                var n = normalize(s);
+                foreach (dynamic el in n)
+                {
+                    var res = addElement(table, el);
+                    if (!res)
+                    {
+                        unresolved.Add(table);
+                        break;
+                    }
+                }
+            }
+
+            if (unresolved.Count != 0)
+                loadFromBackup(unresolved);
+        }
+
+        private List<Dictionary<string, string>> normalize(List<Dictionary<string, JsonElement>> o)
+        {
+            var n = new List<Dictionary<string, string>>();
+            foreach (var e in o)
+            {
+                n.Add(e.ToDictionary(k => k.Key, v =>
+                {
+                    switch (v.Value.ValueKind)
+                    {
+                        case JsonValueKind.String:
+                            return v.Value.ToString();
+                        case JsonValueKind.Number:
+                            return v.Value.GetDouble().ToString();
+                        case JsonValueKind.Object:
+                            return v.Value.GetProperty("Id").GetString();
+                    }
+
+                    return v.Value.GetString();
+                }));
+            }
+
+            return n;
         }
     }
 }
